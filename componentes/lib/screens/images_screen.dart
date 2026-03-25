@@ -25,14 +25,31 @@ class ImagesScreen extends StatelessWidget {
             width: 200,
           ),
 
+          // Image.network(
+          //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS2kEKs1gOGlWdACzOm_yphJm-sf2KVeiWsQ&s",
+          //   width: 500,),
           Image.network(
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS2kEKs1gOGlWdACzOm_yphJm-sf2KVeiWsQ&s",
-            width: 500,),
+            "https://firebasestorage.googleapis.com/v0/b/election-radar-35ba7.firebasestorage.app/o/public%2Fpexels-pixabay-459301.jpg?alt=media&token=dc9f5302-015b-4608-ad7e-bf3b4c3338ce",
+            width: 500,
+          ),
 
           //Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS2kEKs1gOGlWdACzOm_yphJm-sf2KVeiWsQ&s"),
 
           //Text 2
+          Text("Assets"),
 
+          Image.asset("assets/image.png", height: 80),
+
+          FadeInImage(
+            height: 250,
+            placeholder: AssetImage("assets/loading.gif"),
+            image: NetworkImage(
+              "https://firebasestorage.googleapis.com/v0/b/election-radar-35ba7.firebasestorage.app/o/public%2Fpexels-pixabay-459301.jpg?alt=media&token=dc9f5302-015b-4608-ad7e-bf3b4c3338ce",
+              scale: 20,
+            ),
+          ),
+
+          Image.asset("images/programador.jpg", height: 90),
           //Imagen
 
           //    ),
