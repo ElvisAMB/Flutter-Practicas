@@ -5,7 +5,7 @@ class TextScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
- return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text("Configuración de texto"),
         centerTitle: true,
@@ -13,13 +13,18 @@ class TextScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ListTile(
-            title: Text("Columnas"),
-            subtitle: Text("Mostrar como se construyen los textos"),
-            //leading: Icon(Icons.account_tree_outlined),
-            trailing: Icon(Icons.chevron_right),
-            
+          Text("Opción 1"),
+          Text(
+            "Texto desde Design Sistem",
+            style: Theme.of(context).textTheme.titleLarge,
           ),
+          Text("Opción 3", 
+          style: TextStyle(
+            color: Colors.red, 
+            fontSize: 30,
+            backgroundColor: Color.from(alpha: 125, red: 42, green: 86, blue: 2),
+            fontWeight: FontWeight.w600,
+            )),
         ],
       ),
     );

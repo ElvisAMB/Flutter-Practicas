@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
               subtitle: Text("Mostrar como se construyen las filas"),
               leading: Icon(Icons.table_rows),
               trailing: Icon(Icons.chevron_right),
-        
+
               onTap: () {
                 //navigator/Configuración de navegación a través de la invocación de una clase columns_screen.dart
                 final route = MaterialPageRoute(
@@ -144,7 +144,7 @@ class HomeScreen extends StatelessWidget {
                 ); //Si tiene push se crear automáticamente la navegación hacia atrás
               },
             ),
-        
+
             //bandera
             ListTile(
               title: Text("Deber"),
@@ -162,6 +162,23 @@ class HomeScreen extends StatelessWidget {
                   context,
                   route,
                 ); //Si tiene push se crear automáticamente la navegación hacia atrás
+              },
+            ),
+
+            ListTile(
+              title: Text("Deber 2"),
+              subtitle: Text("Flutter Layout Demo"),
+              leading: Icon(Icons.ac_unit_sharp),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                //navigator/Configuración de navegación a través de la invocación de una clase columns_screen.dart
+                // final route = MaterialPageRoute(
+                //   builder: (context) => BanderaScreen(),
+                // );
+                // Navigator.push(
+                //   context,
+                //   route,
+                // ); //Si tiene push se crear automáticamente la navegación hacia atrás
               },
             ),
           ],
