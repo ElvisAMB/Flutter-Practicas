@@ -7,17 +7,18 @@ class PresentacionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Implementación de conocimientos"),
+        title: const Text("Tarea"),
         centerTitle: true,
         backgroundColor: Colors.lightBlue,
       ),
       body: Container(
         decoration: BoxDecoration(
-          border: BoxBorder.all(color: Colors.black),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          //backgroundBlendMode: BlendMode.difference,
+          border: Border(
+            left: BorderSide(width: 2, color: Colors.black),
+            bottom: BorderSide(width: 2, color: Colors.black),
+          ),
         ),
-        margin: EdgeInsets.all(10), //Separación externa
+        margin: EdgeInsets.all(4), //Separación externa
         padding: EdgeInsets.all(20),
         child: Column(
           verticalDirection: VerticalDirection.down,
@@ -29,15 +30,8 @@ class PresentacionScreen extends StatelessWidget {
                 Text(
                   "Flutter layout demo",
                   style: TextStyle(
-                    //color: Colors.red,
                     fontSize: 20,
-                    height: 3,
-                    backgroundColor: Color.from(
-                      alpha: 125,
-                      red: 42,
-                      green: 86,
-                      blue: 2,
-                    ),
+                    height: 2,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -48,22 +42,22 @@ class PresentacionScreen extends StatelessWidget {
             Column(
               children: [
                 Image.asset(
-                  "assets/image.png",
+                  "images/oeschinen_lake_campground.jpg", //"assets/image.png",
                   fit: BoxFit.scaleDown,
-                  width: 80,
-                  //height: 100,
-                  //alignment: Alignment.center,
-                  //fit: BoxFit.fill,
+                  width: 450,
+
+                  //height: 500,
                 ),
-                Text("Imagen a mostrar"),
+                //Text("Imagen a mostrar"),
               ],
             ),
-
+            Padding(padding: EdgeInsetsGeometry.all(5)),
             /**Titulo y Subtitulo */
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Oeschinen Lake Campground",
@@ -75,10 +69,12 @@ class PresentacionScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                //Padding(padding: EdgeInsetsGeometry.all(2)),
                 /**Estrella con valor */
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                                        Text(
                       "Kandersteg, Switzerland",
                       style: TextStyle(
                         color: Colors.grey,
@@ -86,6 +82,7 @@ class PresentacionScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Padding(padding: EdgeInsetsGeometry.all(4)),
                     Icon(Icons.star_rate, color: Colors.orange, size: 35),
                     Text("41"),
                   ],
@@ -93,26 +90,71 @@ class PresentacionScreen extends StatelessWidget {
               ],
             ),
             /**Separador */
-
+            Padding(padding: EdgeInsetsGeometry.all(4)),
             /** Íconos */
             Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 60,
               children: [
-                Icon(Icons.call, color: Colors.deepPurple, size: 35),
-                Icon(
-                  Icons.arrow_outward_rounded,
-                  color: Colors.deepPurple,
-                  size: 35,
+                /**Icono 1 */
+                Column(
+                  children: [
+                    Icon(Icons.call, color: Colors.deepPurple, size: 25),
+                    Text(
+                      "CALL",
+                      style: TextStyle(
+                        fontSize: 10,
+
+                        //fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                Icon(Icons.share, color: Colors.deepPurple, size: 35),
+                /**Icono 2 */
+                Column(
+                  children: [
+                    Icon(
+                      Icons.fmd_good_outlined,
+                      color: Colors.deepPurple,
+                      size: 25,
+                    ),
+                    Text(
+                      "ROUTE",
+                      style: TextStyle(
+                        fontSize: 10,
+
+                        //fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                /**Icono 3 */
+                Column(
+                  children: [
+                    Icon(Icons.share, color: Colors.deepPurple, size: 25),
+                    Text(
+                      "SHARE",
+                      style: TextStyle(
+                        fontSize: 10,
+
+                        //fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
+            Padding(padding: EdgeInsetsGeometry.all(6)),
             /** Texto descriptivo */
             Expanded(
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae mattis urna. Ut vitae enim fermentum, vulputate turpis eu, finibus turpis. Vestibulum dui mi, sollicitudin ac mi non, finibus cursus nulla. Quisque vel commodo sapien, a iaculis nisi. Donec a eros porta, bibendum felis elementum, congue lectus. Vestibulum vestibulum arcu pharetra facilisis iaculis. Etiam viverra nec leo sed venenatis. Ut nec erat sit amet odio sagittis commodo. Pellentesque consectetur pulvinar varius. Integer mollis blandit ante non facilisis. Duis pharetra a nulla ac semper.",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae mattis urna. Ut vitae enim fermentum, vulputate turpis eu, finibus turpis. Vestibulum dui mi, sollicitudin ac mi non, finibus cursus nulla. Quisque vel commodo sapien, a iaculis nisi.",
+                style: TextStyle(
+                  fontSize: 11,
+
+                  //fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
