@@ -39,7 +39,7 @@ class BanderaScreen extends StatelessWidget {
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS2kEKs1gOGlWdACzOm_yphJm-sf2KVeiWsQ&s",
                   height: 350,
                   //alignment: AlignmentGeometry.directional(10, 40),
-                  width: 400,
+                  //width: 50,
                 ),
               ],
               //     ),
