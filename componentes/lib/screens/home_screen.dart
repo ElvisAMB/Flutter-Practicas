@@ -1,3 +1,4 @@
+import 'package:componentes/screens/bandera_screen.dart';
 import 'package:componentes/screens/columns_screen.dart';
 import 'package:componentes/screens/container_screen.dart';
 import 'package:componentes/screens/images_screen.dart';
@@ -141,6 +142,26 @@ class HomeScreen extends StatelessWidget {
               ); //Si tiene push se crear automáticamente la navegación hacia atrás
             },
           ),
+          //bandera
+
+          ListTile(
+            title: Text("Deber"),
+            subtitle: Text("Mostrar como se construye una bandera en un contenedor"),
+            leading: Icon(Icons.text_fields),
+            trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              //navigator/Configuración de navegación a través de la invocación de una clase columns_screen.dart
+              final route = MaterialPageRoute(
+                builder: (context) => BanderaScreen(),
+              );
+              Navigator.push(
+                context,
+                route,
+              ); //Si tiene push se crear automáticamente la navegación hacia atrás
+            },
+          ),
+
+
         ],
       ),
     );
