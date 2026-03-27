@@ -7,149 +7,91 @@ class PresentacionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tarea"),
+        title: const Text("Flutter Layout Demo"),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue,
+        //backgroundColor: Colors.lightBlue,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(width: 2, color: Colors.black),
-            bottom: BorderSide(width: 2, color: Colors.black),
-          ),
-        ),
-        margin: EdgeInsets.all(4), //Separación externa
-        padding: EdgeInsets.all(20),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           verticalDirection: VerticalDirection.down,
           children: [
-            /**Texto de cabecera*/
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Flutter layout demo",
-                  style: TextStyle(
-                    fontSize: 20,
-                    height: 2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-
             /** Imagen */
-            Column(
-              children: [
-                Image.asset(
-                  "images/oeschinen_lake_campground.jpg", //"assets/image.png",
-                  fit: BoxFit.scaleDown,
-                  width: 450,
+            Image.asset("images/oeschinen_lake_campground.jpg"),
 
-                  //height: 500,
-                ),
-                //Text("Imagen a mostrar"),
-              ],
-            ),
-            Padding(padding: EdgeInsetsGeometry.all(5)),
             /**Titulo y Subtitulo */
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Oeschinen Lake Campground",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Oeschinen Lake Campground",
+                          style: TextStyle(
+                            // color: Colors.black,
+                            // fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          "Kandersteg, Switzerland",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                //Padding(padding: EdgeInsetsGeometry.all(2)),
-                /**Estrella con valor */
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                                        Text(
-                      "Kandersteg, Switzerland",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Padding(padding: EdgeInsetsGeometry.all(4)),
-                    Icon(Icons.star_rate, color: Colors.orange, size: 35),
-                    Text("41"),
-                  ],
-                ),
-              ],
+                  ),
+                  Icon(Icons.star_rate, color: Colors.amber),
+                  Text("41"),
+                ],
+              ),
             ),
-            /**Separador */
-            Padding(padding: EdgeInsetsGeometry.all(4)),
-            /** Íconos */
+            /**Fin Titulo y Subtitulo */
+
+            /** Botones */
             Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 60,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+
               children: [
-                /**Icono 1 */
+                /** 1 */
                 Column(
                   children: [
-                    Icon(Icons.call, color: Colors.deepPurple, size: 25),
-                    Text(
-                      "CALL",
-                      style: TextStyle(
-                        fontSize: 10,
-
-                        //fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Icon(Icons.call, color: Colors.indigo),
+                    Text("CALL", style: TextStyle(color: Colors.indigo)),
                   ],
                 ),
+                /** Fin 1 */
                 /**Icono 2 */
                 Column(
                   children: [
-                    Icon(
-                      Icons.fmd_good_outlined,
-                      color: Colors.deepPurple,
-                      size: 25,
-                    ),
-                    Text(
-                      "ROUTE",
-                      style: TextStyle(
-                        fontSize: 10,
-
-                        //fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Icon(Icons.fmd_good_outlined, color: Colors.indigo),
+                    Text("ROUTE", style: TextStyle(color: Colors.indigo)),
                   ],
                 ),
+                /**Fin Icono 2 */
                 /**Icono 3 */
                 Column(
                   children: [
-                    Icon(Icons.share, color: Colors.deepPurple, size: 25),
-                    Text(
-                      "SHARE",
-                      style: TextStyle(
-                        fontSize: 10,
-
-                        //fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Icon(Icons.share_rounded, color: Colors.indigo),
+                    Text("SHARE", style: TextStyle(color: Colors.indigo)),
                   ],
                 ),
+                /**Fin Icono 3 */
               ],
             ),
-            Padding(padding: EdgeInsetsGeometry.all(6)),
-            /** Texto descriptivo */
-            Expanded(
+
+            /** Fin Botones */
+            /**Inicio de texto final */
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vitae mattis urna. Ut vitae enim fermentum, vulputate turpis eu, finibus turpis. Vestibulum dui mi, sollicitudin ac mi non, finibus cursus nulla. Quisque vel commodo sapien, a iaculis nisi.",
+                "Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.",
                 style: TextStyle(
                   fontSize: 11,
 
@@ -157,6 +99,7 @@ class PresentacionScreen extends StatelessWidget {
                 ),
               ),
             ),
+            /**Final de texto final */
           ],
         ),
       ),
