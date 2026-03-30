@@ -7,9 +7,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Nuestra Tienda"),
+        title: Text("Nuestra Tienda", style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.deepPurpleAccent,
         actions: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -23,11 +23,11 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: .center,
             children: [
-              SizedBox(height: 20),
+              SizedBox(height: 40),
               Column(
                 children: [
                   Text(
-                    "Coleccion 2024",
+                    "Colección 2024",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -37,9 +37,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 2),
               Text(
-                "Diseno Atemporal",
+                "Diseño Atemporal",
                 style: TextStyle(
                   fontSize: 32,
                   color: Colors.black,
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
 
               SizedBox(height: 16),
               Text(
-                "Jarron de ceramica",
+                "Jarrón de cerámica",
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -78,11 +78,12 @@ class HomeScreen extends StatelessWidget {
               Text("\$45", style: TextStyle(fontSize: 16, color: Colors.grey)),
 
               SizedBox(height: 16),
-
+              //Boton
               Container(
+                height: 25,
                 decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border(
                     left: BorderSide(
                       width: 190,
@@ -106,8 +107,6 @@ class HomeScreen extends StatelessWidget {
               ),
 
               SizedBox(height: 16),
-
-
             ],
           ),
         ),
