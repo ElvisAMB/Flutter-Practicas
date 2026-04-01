@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Mi carrito"),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          CartCard(),
+          CartCard(),
+          CartCard(),
+        ],
+      ),
+    );
+  }
+}
+
+
+class CartCard extends StatelessWidget {
+  const CartCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        spacing: 12,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadiusGeometry.circular(16),
+            child: Image.network(
+              "https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
+              width: 80,
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text(
+                  "Reloj Minimalista Argento",
+                  style: TextStyle(fontWeight: .w600),
+                ),
+                Text("Acero Inoxidable / 40mm", style: TextStyle(fontSize: 11)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "\$120.00",
+                        style: TextStyle(
+                          color: Colors.deepPurpleAccent,
+                          fontWeight: .bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE8DEF8),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: .center,
+                        children: [
+                          SizedBox(width: 8),
+                          GestureDetector(
+                            onTap: () {
+                              print("Resta elementos");
+                            },
+                            child: SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: Icon(Icons.remove_outlined),
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Text("1"),
+                          SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () {
+                              print("Suma elementos");
+                            },
+                            child: SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: Icon(Icons.add_outlined),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

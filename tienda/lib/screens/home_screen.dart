@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tienda/screens/cart_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -111,6 +112,26 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+        ],
+        onTap: (value) {
+          if (value == 1) {
+            final route = MaterialPageRoute(
+              builder: (context) {
+                return CartScreen();
+              },
+            );
+            Navigator.push(context, route);
+          }
+        },
+      ),
     );
   }
 }
+
