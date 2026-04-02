@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tienda/screens/cart_screen.dart';
+import 'package:tienda/services/product_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -79,34 +80,17 @@ class HomeScreen extends StatelessWidget {
               Text("\$45", style: TextStyle(fontSize: 16, color: Colors.grey)),
 
               SizedBox(height: 16),
-              //Boton
-              Container(
-                height: 25,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border(
-                    left: BorderSide(
-                      width: 190,
-                      color: Colors.deepPurpleAccent,
-                      //strokeAlign: BorderSide.strokeAlignCenter,
-                    ),
-                    right: BorderSide(
-                      width: 190,
-                      color: Colors.deepPurpleAccent,
-                      //strokeAlign: BorderSide.strokeAlignCenter,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  "Anadir",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+             
+              SizedBox(
+                width: 350,
+                child: FilledButton(
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    ProductService().getProducts();
+                  }, 
+                  child: Text("Añadir")
                 ),
               ),
-
               SizedBox(height: 16),
             ],
           ),
