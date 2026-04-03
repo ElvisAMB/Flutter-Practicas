@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tienda/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-    {super.key, required this.productModel}
-  );
+  const ProductCard({super.key, required this.productModel});
 
   final ProductModel productModel;
 
@@ -25,13 +23,16 @@ class ProductCard extends StatelessWidget {
               topRight: Radius.circular(32),
             ),
             child: Image.network(
-              productModel.image //"https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
+              productModel
+                  .image, //"https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
             ),
           ),
           SizedBox(height: 12),
-          Text(productModel.description, style: TextStyle(fontWeight: .bold)),
+          Text(productModel.name, style: TextStyle(fontWeight: .bold)),
           SizedBox(height: 8),
-          Text("\$$productModel.price"),
+          Text(
+            "${productModel.currencySymbol}${productModel.price.toStringAsFixed(2)}",
+          ),
           SizedBox(height: 8),
           SizedBox(
             width: 350,
