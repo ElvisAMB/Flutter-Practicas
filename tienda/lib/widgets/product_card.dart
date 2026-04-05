@@ -22,10 +22,7 @@ class ProductCard extends StatelessWidget {
               topLeft: Radius.circular(32),
               topRight: Radius.circular(32),
             ),
-            child: Image.network(
-              productModel
-                  .image, //"https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
-            ),
+            child: Image.network(productModel.image),
           ),
           SizedBox(height: 12),
           Text(productModel.name, style: TextStyle(fontWeight: .bold)),

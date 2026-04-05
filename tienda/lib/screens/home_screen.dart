@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                 );
-              },
+              }, // final builder
             ),
 
             //    },
