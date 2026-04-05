@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tienda/screens/cart_screen.dart';
+import 'package:tienda/services/product_service.dart';
+import 'package:tienda/widgets/product_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -22,21 +24,16 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: .center,
           children: [
-            //SizedBox(height: 40),
-            Column(
-              children: [
-                Text(
-                  "Colección 2024",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 2,
-                  ),
-                ),
-              ],
+            Text(
+              "Colección 2024",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 3,
+              ),
             ),
-            //SizedBox(height: 2),
+
             Text(
               "Diseño Atemporal",
               style: TextStyle(
@@ -45,13 +42,9 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             //ProductCard
 
-
-
-
-            //SizedBox(height: 30),
-        
             //Imagen
             // Container(
             //   decoration: BoxDecoration(
@@ -68,7 +61,7 @@ class HomeScreen extends StatelessWidget {
             //     ),
             //   ),
             // ),
-        
+
             // SizedBox(height: 16),
             // Text(
             //   "Jarrón de cerámica",
@@ -80,35 +73,34 @@ class HomeScreen extends StatelessWidget {
             // ),
             // //Buttons
             // Text("\$45", style: TextStyle(fontSize: 16, color: Colors.grey)),
-        
+
             // SizedBox(height: 16),
-        
-            //         FutureBuilder(
-            //           future: ProductService().getProducts(),
-            //           builder: (context, snapshot) {
-            //             if (snapshot.hasError) {
-            //               return Text("Ha ocurrido un eror en la consulta");
-            //             }
-        
-            //             if (!snapshot.hasData) {
-            //               return Center(child: CircularProgressIndicator());
-            //             }
-        
-            //             final productos = snapshot.data ?? [];
-        
-            //             return ListView.builder(
-            //               itemBuilder: (context, index) {
-            //                 final producto = productos[index];
-            //                 return ProductCard(productModel: producto);
-            //               },
-            //               itemCount: productos.length,
-            //               shrinkWrap: true,
-            //               physics: NeverScrollableScrollPhysics(),
-            //             );
-            //           },
-            //         ),
-            //       );
-            //     },
+            FutureBuilder(
+              future: ProductService().getProducts(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Ha ocurrido un eror en la consulta");
+                }
+
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                final productos = snapshot.data ?? [];
+
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    final producto = productos[index];
+                    return ProductCard(productModel: producto);
+                  },
+                  itemCount: productos.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                );
+              },
+            ),
+
+            //    },
             //     child: Text("Añadir"),
             //   ),
             // ),
