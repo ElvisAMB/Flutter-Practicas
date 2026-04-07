@@ -139,9 +139,9 @@ class CartCard extends StatelessWidget {
                           SizedBox(width: 8),
                           GestureDetector(
                             onTap: () {
-                              context.read()<CartNotifier>().removeProductToCard(
-                                producto,
-                              );
+                              context
+                                  .read()<CartNotifier>()
+                                  .removeProductToCard(producto);
                             },
                             child: SizedBox(
                               height: 25,
@@ -180,6 +180,63 @@ class CartCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class PricesCard extends StatelessWidget {
+  const PricesCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(135, 245, 243, 243),
+          borderRadius: BorderRadius.circular(10),
+          border: BoxBorder.all(style: BorderStyle.solid),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Subtotal"),
+                //SizedBox(width: 1),
+                Text("\$454.50"),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Envío"),
+                //SizedBox(width: 50),
+                Text("Gratis"),
+              ],
+            ),
+            Row(),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Total",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                //SizedBox(width: 50),
+                Text(
+                  "\$454.50",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

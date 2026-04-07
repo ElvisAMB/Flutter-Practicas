@@ -27,9 +27,12 @@ class ProductCard extends StatelessWidget {
             child: Image.network(productModel.image),
           ),
           SizedBox(height: 12),
-          Text(productModel.description, style: TextStyle(fontWeight: .bold)),
+          Text(productModel.name, style: TextStyle(fontWeight: .bold)),
           SizedBox(height: 8),
-          Text(productModel.price.toStringAsFixed(2)),
+          //Text(productModel.price.toStringAsFixed(2)),
+          Text(
+            "${productModel.currencySymbol}${productModel.price.toStringAsFixed(2)}",
+          ),
           SizedBox(height: 8),
           SizedBox(
             width: 350,
