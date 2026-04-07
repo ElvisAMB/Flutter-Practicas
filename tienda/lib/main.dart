@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tienda/notifier/card_notifier.dart';
 import 'package:tienda/screens/home_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -8,10 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //title: 'Mi tienda',
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen()
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => CartNotifier())],
+      child: MaterialApp(
+        //title: 'Mi tienda',
+        debugShowCheckedModeBanner: false,
+        home: HomeScreen(),
+      ),
     );
   }
 }

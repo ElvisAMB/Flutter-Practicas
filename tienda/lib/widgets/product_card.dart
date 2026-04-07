@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tienda/models/product_model.dart';
+import 'package:tienda/notifier/card_notifier.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-    {super.key, required this.productModel}
-  );
+  const ProductCard({super.key, required this.productModel});
 
   final ProductModel productModel;
 
@@ -24,20 +24,18 @@ class ProductCard extends StatelessWidget {
               topLeft: Radius.circular(32),
               topRight: Radius.circular(32),
             ),
-            child: Image.network(
-              productModel.image //"https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
-            ),
+            child: Image.network(productModel.image),
           ),
           SizedBox(height: 12),
           Text(productModel.description, style: TextStyle(fontWeight: .bold)),
           SizedBox(height: 8),
-          Text("\$$productModel.price"),
+          Text(productModel.price.toStringAsFixed(2)),
           SizedBox(height: 8),
           SizedBox(
             width: 350,
             child: FilledButton(
               onPressed: () {
-                //ProductService().getProducts();
+                context.read<CartNotifier>(); //ProductService().getProducts();
               },
               child: Text("Añadir"),
             ),

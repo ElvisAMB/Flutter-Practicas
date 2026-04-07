@@ -25,3 +25,5 @@ samples, guidance on mobile development, and a full API reference.
 # O cuando un programa no  quiere ejecutar se aplican estos dos comandos
 #
 # Posicionarse sobre el widget que se desea abstraer y dar clic en el foquito y seleccionar extraer widget
+
+#flutter pub add provider
