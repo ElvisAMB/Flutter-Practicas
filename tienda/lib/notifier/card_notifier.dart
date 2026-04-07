@@ -26,4 +26,18 @@ class CartNotifier extends ChangeNotifier {
     _cartProducts.clear();
     notifyListeners();
   }
+
+  // Subtotal
+    double get subtotal {
+        final prices =  cartProducts.map((e) {
+          return e.price;
+        }).toList();
+        return prices.isNotEmpty ? prices.reduce((a, b) => a + b) : 0.0;
+    }
+
+    // Envio 
+    double get envio => 10.0;
+
+    //Total
+    double get total => subtotal + envio;
 }
