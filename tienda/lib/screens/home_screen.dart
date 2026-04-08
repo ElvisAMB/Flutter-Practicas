@@ -43,38 +43,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            //ProductCard
-
-            //Imagen
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(20),
-            //   ),
-            //   child: ClipRRect(
-            //     borderRadius: BorderRadiusGeometry.circular(50),
-            //     child: Image.network(
-            //       "https://raw.githubusercontent.com/RicharC293/fake_doctors/refs/heads/master/images/producto-1.jpg",
-            //       height: 400,
-            //       fit: BoxFit.cover,
-            //       width: double.infinity,
-            //     ),
-            //   ),
-            // ),
-
-            // SizedBox(height: 16),
-            // Text(
-            //   "Jarrón de cerámica",
-            //   style: TextStyle(
-            //     fontSize: 20,
-            //     color: Colors.black,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            // //Buttons
-            // Text("\$45", style: TextStyle(fontSize: 16, color: Colors.grey)),
-
-            // SizedBox(height: 16),
             FutureBuilder(
               future: ProductService().getProducts(),
               builder: (context, snapshot) {
@@ -86,30 +54,22 @@ class HomeScreen extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 }
 
-                final productos = snapshot.data ?? [];
+                final data = snapshot.data ?? [];
 
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final producto = productos[index];
+                    final producto = data[index];
                     return ProductCard(productModel: producto);
                   },
-                  itemCount: productos.length,
+                  itemCount: data.length,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                 );
               }, // final builder
             ),
-
-            //    },
-            //     child: Text("Añadir"),
-            //   ),
-            // ),
-            // SizedBox(height: 16),
-            //ProductCard(productModel: product)
           ],
         ),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),

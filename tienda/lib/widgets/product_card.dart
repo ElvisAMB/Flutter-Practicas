@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tienda/models/product_model.dart';
-import 'package:tienda/notifier/card_notifier.dart';
+import 'package:tienda/notifier/cart_notifier.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.productModel});
@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
             width: 350,
             child: FilledButton(
               onPressed: () {
-                context.read<CartNotifier>(); //ProductService().getProducts();
+                context.read<CartNotifier>().addProductToCart(productModel);
               },
               child: Text("Añadir"),
             ),

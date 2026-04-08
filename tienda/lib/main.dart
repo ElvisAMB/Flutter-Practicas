@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tienda/notifier/card_notifier.dart';
+import 'package:tienda/notifier/cart_notifier.dart';
 import 'package:tienda/screens/home_screen.dart';
 
 void main() => runApp(const MyApp());
