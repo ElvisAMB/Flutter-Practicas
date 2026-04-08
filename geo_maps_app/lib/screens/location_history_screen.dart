@@ -122,6 +122,7 @@ class _HistoryCard extends StatelessWidget {
             : null,
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.05),
             blurRadius: 6,
             offset: const Offset(0, 2),
@@ -138,6 +139,7 @@ class _HistoryCard extends StatelessWidget {
             height: 36,
             decoration: BoxDecoration(
               color: isLatest
+                  // ignore: deprecated_member_use
                   ? AppTheme.primaryColor.withOpacity(0.12)
                   : Colors.grey.shade100,
               borderRadius: BorderRadius.circular(10),

@@ -102,6 +102,7 @@ class MapTypeSelectorSheet extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
                     color: isSelected
+                        // ignore: deprecated_member_use
                         ? option.color.withOpacity(0.12)
                         : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(14),

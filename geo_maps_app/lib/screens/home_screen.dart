@@ -89,6 +89,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.black.withOpacity(0.12),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
@@ -169,6 +170,7 @@ class _AppBarButton extends StatelessWidget {
       color: Colors.white,
       borderRadius: BorderRadius.circular(14),
       elevation: 2,
+      // ignore: deprecated_member_use
       shadowColor: Colors.black.withOpacity(0.12),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
@@ -191,6 +193,7 @@ class _LoadingOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // ignore: deprecated_member_use
       color: Colors.black.withOpacity(0.3),
       child: const Center(
         child: Card(

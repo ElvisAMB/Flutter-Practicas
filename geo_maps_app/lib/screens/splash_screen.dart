@@ -104,6 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(28),
                 ),
@@ -129,6 +130,7 @@ class _SplashScreenState extends State<SplashScreen>
               Text(
                 'Tu ubicación en tiempo real',
                 style: TextStyle(
+                  // ignore: deprecated_member_use
                   color: Colors.white.withOpacity(0.8),
                   fontSize: 16,
                   letterSpacing: 0.3,
@@ -143,6 +145,7 @@ class _SplashScreenState extends State<SplashScreen>
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation<Color>(
+                    // ignore: deprecated_member_use
                     Colors.white.withOpacity(0.8),
                   ),
                 ),

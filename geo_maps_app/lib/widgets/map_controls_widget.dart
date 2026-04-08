@@ -65,6 +65,7 @@ class _MapFab extends StatelessWidget {
     return Material(
       color: isDark ? const Color(0xFF2C2C2C) : Colors.white,
       elevation: 3,
+      // ignore: deprecated_member_use
       shadowColor: Colors.black.withOpacity(0.15),
       borderRadius: BorderRadius.circular(12),
       child: InkWell(

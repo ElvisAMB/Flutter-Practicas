@@ -24,6 +24,7 @@ class LocationInfoCard extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.12),
             blurRadius: 20,
             offset: const Offset(0, -4),
@@ -87,7 +88,9 @@ class LocationInfoCard extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: provider.isTracking
+                    // ignore: deprecated_member_use
                     ? AppTheme.accentColor.withOpacity(0.15)
+                    // ignore: deprecated_member_use
                     : Colors.orange.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -254,6 +257,7 @@ class _DataTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
             color: isDark
+                // ignore: deprecated_member_use
                 ? Colors.white.withOpacity(0.07)
                 : const Color(0xFFF1F3F4),
             borderRadius: BorderRadius.circular(12),

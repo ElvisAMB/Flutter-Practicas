@@ -35,6 +35,7 @@ class PermissionErrorWidget extends StatelessWidget {
                 width: 96,
                 height: 96,
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: config.color.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
