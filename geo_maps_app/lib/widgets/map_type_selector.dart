@@ -24,33 +24,33 @@ class MapTypeSelectorSheet extends StatelessWidget {
     final provider = context.watch<LocationProvider>();
 
     final types = [
-      _MapTypeOption(
+      const _MapTypeOption(
         type: MapType.normal,
         label: 'Normal',
         icon: Icons.map_rounded,
         description: 'Calles y etiquetas',
-        color: const Color(0xFF4CAF50),
+        color: Color(0xFF4CAF50),
       ),
-      _MapTypeOption(
+      const _MapTypeOption(
         type: MapType.satellite,
         label: 'Satélite',
         icon: Icons.satellite_alt_rounded,
         description: 'Imágenes aéreas reales',
-        color: const Color(0xFF2196F3),
+        color: Color(0xFF2196F3),
       ),
-      _MapTypeOption(
+      const _MapTypeOption(
         type: MapType.terrain,
         label: 'Terreno',
         icon: Icons.terrain_rounded,
         description: 'Relieve y topografía',
-        color: const Color(0xFFFF9800),
+        color: Color(0xFFFF9800),
       ),
-      _MapTypeOption(
+      const _MapTypeOption(
         type: MapType.hybrid,
         label: 'Híbrido',
         icon: Icons.layers_rounded,
         description: 'Satélite con etiquetas',
-        color: const Color(0xFF9C27B0),
+        color: Color(0xFF9C27B0),
       ),
     ];
 

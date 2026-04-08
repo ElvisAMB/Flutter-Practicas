@@ -106,7 +106,7 @@ class PermissionErrorWidget extends StatelessWidget {
   _ErrorConfig _getConfig(LocationStatus status) {
     switch (status) {
       case LocationStatus.permissionDenied:
-        return _ErrorConfig(
+        return const _ErrorConfig(
           icon: Icons.location_off_rounded,
           color: AppTheme.errorColor,
           title: 'Permiso de ubicación requerido',
@@ -114,7 +114,7 @@ class PermissionErrorWidget extends StatelessWidget {
           actionLabel: 'Conceder permiso',
         );
       case LocationStatus.permissionPermanentlyDenied:
-        return _ErrorConfig(
+        return const _ErrorConfig(
           icon: Icons.no_encryption_rounded,
           color: AppTheme.errorColor,
           title: 'Permiso bloqueado',
@@ -122,7 +122,7 @@ class PermissionErrorWidget extends StatelessWidget {
           actionLabel: 'Abrir ajustes',
         );
       case LocationStatus.serviceDisabled:
-        return _ErrorConfig(
+        return const _ErrorConfig(
           icon: Icons.location_disabled_rounded,
           color: AppTheme.warningColor,
           title: 'GPS desactivado',
@@ -130,7 +130,7 @@ class PermissionErrorWidget extends StatelessWidget {
           actionLabel: 'Activar ubicación',
         );
       default:
-        return _ErrorConfig(
+        return const _ErrorConfig(
           icon: Icons.error_outline_rounded,
           color: AppTheme.errorColor,
           title: 'Error de ubicación',
