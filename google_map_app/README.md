@@ -15,3 +15,14 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+# flutter create . => para regenerar las carpetas o archivos.
+<!-- dependencies:
+  google_maps_flutter: ^2.6.0
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
+  permission_handler: ^11.3.0 -->
+
+# Crear cuenta en Google Cloud Platform
+
+# https://console.cloud.google.com/freetrial/signup/billing/EC?authuser=5
