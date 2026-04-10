@@ -26,3 +26,19 @@ samples, guidance on mobile development, and a full API reference.
 # Crear cuenta en Google Cloud Platform
 
 # https://console.cloud.google.com/freetrial/signup/billing/EC?authuser=5
+
+
+
+# Limpiar el proyecto con todo lo que no necesitemos
+#   flutter clean
+# Se ejecuta antes de compratir un proyecto, el objetivo es que pese menos la carpeta
+#   flutter pub get
+# O cuando un programa no  quiere ejecutar se aplican estos dos comandos
+# Para actualizar todos los paquetes del proyecto
+# flutter upgrade
+# flutter --version
+# dart --version
+# flutter pub get
+# Posicionarse sobre el widget que se desea abstraer y dar clic en el foquito y seleccionar extraer widget
+# Clave API AIzaSyDDZCVA3eNrJ0gZzC1cz-MQ9iI29AyuATc
+# flutter pub add provider
