@@ -7,9 +7,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return Container();
     return ui.ProfileScreen(
-      providers: [ui.EmailAuthProvider()],
+      //providers: [ui.EmailAuthProvider()],
       actions: [
         ui.SignedOutAction((context) {
           final route = MaterialPageRoute(
@@ -17,9 +16,10 @@ class ProfileScreen extends StatelessWidget {
               return LoginScreen();
             },
           );
-          Navigator.pushAndRemoveUntil(context, route, (_) => false);
+          Navigator.pushReplacement(context, route, result: (_) => false);
         }),
       ],
     );
   }
 }
+

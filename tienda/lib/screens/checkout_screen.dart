@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tienda/notifier/cart_notifier.dart';
+import 'package:tienda/services/firestore_service.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -27,8 +28,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.dispose();
   }
 
-  void _confirmarPedido() {
+  Future<void> _confirmarPedido() async {
     if (!_formKey.currentState!.validate()) return;
+    // Servicio
+    final cart = context.read<CartNotifier>();
+    await FirestoreService().createOrder(
+      cart.cartProducts,
+      cart.envio,
+      cart.total,
+      _nombreController.text,
+    );
+
+    if (!mounted) return;
 
     context.read<CartNotifier>().clearCart();
 
@@ -120,16 +131,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _CampoTexto(
               controller: _direccionController,
               label: "Dirección",
-              hint: "Calle 123, Col. Centro",
+              hint: "Barrio Cuba Calle 123, Col. Centro",
               icon: Icons.location_on_outlined,
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? "Ingresa tu dirección" : null,
+              validator: (v) => (v == null || v.trim().isEmpty)
+                  ? "Ingresa tu dirección"
+                  : null,
             ),
             SizedBox(height: 12),
             _CampoTexto(
               controller: _ciudadController,
               label: "Ciudad / Estado",
-              hint: "Ciudad de México",
+              hint: "Quito",
               icon: Icons.location_city_outlined,
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? "Ingresa tu ciudad" : null,
@@ -253,11 +265,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       Text(
                         "Total",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         "\$${cart.total.toStringAsFixed(2)}",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
