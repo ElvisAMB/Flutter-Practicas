@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95672289191",
+    "project_id": "tienda-eela",
+    "storage_bucket": "tienda-eela.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95672289191:android:e07cb4603f681364bdd882",
+        "android_client_info": {
+          "package_name": "com.example.tienda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQyusb_0SFEmK8HRHX9UZOIIkj54su4xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
