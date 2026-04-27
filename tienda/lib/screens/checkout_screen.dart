@@ -29,14 +29,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _confirmarPedido() async {
+    // ignore: avoid_print
+    print(_formKey.toString());
     if (!_formKey.currentState!.validate()) return;
     // Servicio
     final cart = context.read<CartNotifier>();
+    //Guardar en la base de datos
     await FirestoreService().createOrder(
       cart.cartProducts,
       cart.envio,
       cart.total,
       _nombreController.text,
+      _emailController.text,
+      _direccionController.text,
+      _ciudadController.text,
+      (_metodoPago == 0 ? "Tarjeta de Crédito" : (_metodoPago == 1 ? "Transferencia Bancaria" : "Efectivo")),
     );
 
     if (!mounted) return;

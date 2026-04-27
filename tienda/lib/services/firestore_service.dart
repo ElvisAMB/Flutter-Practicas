@@ -12,7 +12,14 @@ class FirestoreService {
     double delivery,
     double total,
     String name,
+    String email,
+    String direccion,
+    String ciudad,
+    String metodoPago,
+    //GlobalKey<FormState> form
   ) async {
+    //printToConsole(form.toString());
+
     final data = {
       'user_id': FirebaseAuth.instance.currentUser!.uid,
       'products': product
@@ -26,9 +33,15 @@ class FirestoreService {
             },
           )
           .toList(),
-      'delivery_info': {'name': name},
-      'delivery': delivery,
-      'total': total,
+      'delivery_info': {
+        'name': name,
+        'delivery': delivery,
+        'total': total,
+        "email": email,
+        "direccion": direccion,
+        "ciudad": ciudad,
+        "metodoPago": metodoPago,
+      },
     }; //fin data
     db.collection("orders").add(data);
   }
