@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tienda/models/product_model.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreService {
   //Inicializar firestore (base de datos en Firebase)
@@ -16,35 +17,38 @@ class FirestoreService {
     String direccion,
     String ciudad,
     String metodoPago,
-    //GlobalKey<FormState> form
   ) async {
-    //printToConsole(form.toString());
-
     final data = {
+      'id': Uuid().v1(),
       'user_id': FirebaseAuth.instance.currentUser!.uid,
       'products': product
           .map(
             (product) => {
               'id': product.id,
-              'name': product.name,
+              "currency": product.currency,
+              "currencySymbol": product.currencySymbol,
               'description': product.description,
-              'price': product.price,
               'image': product.image,
+              'name': product.name,
+              'price': product.price,
             },
           )
           .toList(),
       'delivery_info': {
         'name': name,
-        'delivery': delivery,
-        'total': total,
         "email": email,
-        "direccion": direccion,
-        "ciudad": ciudad,
-        "metodoPago": metodoPago,
+        "address": direccion,
+        "city": ciudad,
+        "PayMethod": metodoPago,
       },
+      'delivery': delivery,
+      'total': total,
+      "created_date": DateTime.now().toIso8601String(),
     }; //fin data
     db.collection("orders").add(data);
   }
 
   //Crear la operación lectura que lee las órdenes
+
+  
 }

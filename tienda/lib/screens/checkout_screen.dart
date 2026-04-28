@@ -115,8 +115,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             SizedBox(height: 12),
             _CampoTexto(
               controller: _nombreController,
-              label: "Nombre completo",
-              hint: "Juan García",
+              label: "Nombres completos",
+              hint: "Nombres completos",
               icon: Icons.person_outline,
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? "Ingresa tu nombre" : null,
@@ -124,8 +124,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             SizedBox(height: 12),
             _CampoTexto(
               controller: _emailController,
-              label: "Correo electrónico",
-              hint: "correo@ejemplo.com",
+              label: "correo@ejemplo.com",
+              hint: "Correo electrónico",
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
               validator: (v) {
@@ -138,7 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _CampoTexto(
               controller: _direccionController,
               label: "Dirección",
-              hint: "Barrio Cuba Calle 123, Col. Centro",
+              hint: "Dirección",
               icon: Icons.location_on_outlined,
               validator: (v) => (v == null || v.trim().isEmpty)
                   ? "Ingresa tu dirección"
@@ -148,7 +148,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _CampoTexto(
               controller: _ciudadController,
               label: "Ciudad / Estado",
-              hint: "Quito",
+              hint: "Ciudad / Estado",
               icon: Icons.location_city_outlined,
               validator: (v) =>
                   (v == null || v.trim().isEmpty) ? "Ingresa tu ciudad" : null,
