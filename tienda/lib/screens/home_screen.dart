@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tienda/screens/cart_screen.dart';
+import 'package:tienda/screens/orders_screen.dart';
 import 'package:tienda/screens/profile_screen.dart';
 import 'package:tienda/services/product_service.dart';
 import 'package:tienda/widgets/product_card.dart';
@@ -11,15 +12,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Nuestra Tienda", style: TextStyle(color: Colors.white)),
+        title: Text("Our Store", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
         actions: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Icon(Icons.account_circle_outlined),
-
-          // ),
           IconButton(
             onPressed: () {
               final route = MaterialPageRoute(
@@ -83,22 +79,41 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          // #0
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"), 
+          // #1
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt),
+            label: "Orders",
+          ), 
+          // #2
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: "Cart",
-          ),
+          ), 
         ],
         onTap: (value) {
-          if (value == 1) {
-            final route = MaterialPageRoute(
-              builder: (context) {
-                return CartScreen();
-              },
-            );
-            Navigator.push(context, route);
+          switch (value) {
+            case 1:
+              final route = MaterialPageRoute(
+                builder: (context) {
+                  return OrdersScreen();
+                },
+              );
+              Navigator.push(context, route);
+              break;
+            case 2:
+              final route = MaterialPageRoute(
+                builder: (context) {
+                  return CartScreen();
+                },
+              );
+              Navigator.push(context, route);
+              break;
+            default:
           }
         },
       ),

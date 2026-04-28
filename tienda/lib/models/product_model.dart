@@ -29,6 +29,18 @@ class ProductModel {
     );
   }
 
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel(
+      id: (map['id'] as num).toInt(),
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      price: (map['price'] as num).toDouble(),
+      currency: map['currency'] ?? '',
+      currencySymbol: map['currencySymbol'] ?? '',
+      image: map['image'] ?? '',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -37,6 +49,18 @@ class ProductModel {
       'price': price,
       'currency': currency,
       'currency_symbol': currencySymbol,
+      'image': image,
+    };
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'currency': currency,
+      'currencySymbol': currencySymbol,
       'image': image,
     };
   }

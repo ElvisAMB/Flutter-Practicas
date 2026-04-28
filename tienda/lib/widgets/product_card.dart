@@ -40,7 +40,7 @@ class ProductCard extends StatelessWidget {
               onPressed: () {
                 context.read<CartNotifier>().addProductToCart(productModel);
               },
-              child: Text("Añadir"),
+              child: Text("Add"),
             ),
           ),
           SizedBox(height: 12),

@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tienda/models/order_model.dart';
 import 'package:tienda/models/product_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -39,7 +42,7 @@ class FirestoreService {
         "email": email,
         "address": direccion,
         "city": ciudad,
-        "PayMethod": metodoPago,
+        "payMethod": metodoPago,
       },
       'delivery': delivery,
       'total': total,
@@ -49,6 +52,21 @@ class FirestoreService {
   }
 
   //Crear la operación lectura que lee las órdenes
+  Future<List<OrderModel>> getOrders() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .get();
 
-  
+    return snapshot.docs
+        .map((doc) => OrderModel.fromMap(doc.data(), docId: doc.id))
+        .toList();
+  }
+
+  Future<void> getInvoices() async {
+    final data = await db.collection("orders").get();
+
+    for (var item in data.docs) {
+      print(item.data());
+    }
+  }
 }

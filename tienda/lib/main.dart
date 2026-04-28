@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => CartNotifier())],
       child: MaterialApp(
-        title: 'Mi tienda',
+        title: 'My Store',
         //locale: const Locale('es', 'ES'),
         //supportedLocales: const [Locale('en'), Locale('es')],
         // localizationsDelegates: const [

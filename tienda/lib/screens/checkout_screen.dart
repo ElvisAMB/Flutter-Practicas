@@ -91,7 +91,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Navigator.of(ctx).pop();
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
-              child: Text("Ir al inicio"),
+              child: Text("Go to Start"),
             ),
           ),
         ],
@@ -111,7 +111,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           padding: EdgeInsets.all(16),
           children: [
             // Sección datos de envío
-            _SectionTitle(title: "Datos de envío"),
+            _SectionTitle(title: "Delivery Information"),
             SizedBox(height: 12),
             _CampoTexto(
               controller: _nombreController,
@@ -251,7 +251,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Envío",
+                        "Send",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Color(0xff79767B),
