@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tienda/notifier/cart_notifier.dart';
+import 'package:tienda/screens/map_screen.dart';
 import 'package:tienda/services/firestore_service.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -18,6 +20,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _ciudadController = TextEditingController();
 
   int _metodoPago = 0; // 0: Tarjeta, 1: Transferencia, 2: Efectivo
+
+  @override
+  void initState() {
+    super.initState();
+    //Otra programación
+    final userData = FirebaseAuth.instance.currentUser!;
+    //print(userData);
+    _nombreController.text = userData.displayName ?? "";
+    _emailController.text = userData.email ?? "";
+  }
 
   @override
   void dispose() {
@@ -43,7 +55,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       _emailController.text,
       _direccionController.text,
       _ciudadController.text,
-      (_metodoPago == 0 ? "Tarjeta de Crédito" : (_metodoPago == 1 ? "Transferencia Bancaria" : "Efectivo")),
+      (_metodoPago == 0
+          ? "Tarjeta de Crédito"
+          : (_metodoPago == 1 ? "Transferencia Bancaria" : "Efectivo")),
     );
 
     if (!mounted) return;
@@ -115,49 +129,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             SizedBox(height: 12),
             _CampoTexto(
               controller: _nombreController,
-              label: "Nombres completos",
-              hint: "Nombres completos",
+              label: "Full Names",
+              hint: "Full Names",
               icon: Icons.person_outline,
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? "Ingresa tu nombre" : null,
+                  (v == null || v.trim().isEmpty) ? "Put your names" : null,
             ),
             SizedBox(height: 12),
             _CampoTexto(
               controller: _emailController,
-              label: "correo@ejemplo.com",
-              hint: "Correo electrónico",
+              label: "email@domain.com",
+              hint: "email",
               icon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
               validator: (v) {
-                if (v == null || v.trim().isEmpty) return "Ingresa tu correo";
-                if (!v.contains('@')) return "Correo inválido";
+                if (v == null || v.trim().isEmpty) return "Put your email";
+                if (!v.contains('@')) return "Invalid Email";
                 return null;
               },
             ),
             SizedBox(height: 12),
             _CampoTexto(
               controller: _direccionController,
-              label: "Dirección",
-              hint: "Dirección",
+              label: "Address",
+              hint: "Address",
               icon: Icons.location_on_outlined,
               validator: (v) => (v == null || v.trim().isEmpty)
-                  ? "Ingresa tu dirección"
+                  ? "Put your address"
                   : null,
+              onTap: () {
+                final route = MaterialPageRoute(
+                  builder: (context) => MapScreen(),
+                );
+                Navigator.push(context, route);
+              },
             ),
             SizedBox(height: 12),
             _CampoTexto(
               controller: _ciudadController,
-              label: "Ciudad / Estado",
-              hint: "Ciudad / Estado",
+              label: "City / State",
+              hint: "City / State",
               icon: Icons.location_city_outlined,
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? "Ingresa tu ciudad" : null,
+                  (v == null || v.trim().isEmpty) ? "Put your city" : null,
             ),
 
             SizedBox(height: 24),
 
             // Sección método de pago
-            _SectionTitle(title: "Método de pago"),
+            _SectionTitle(title: "Pay Method"),
             SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
@@ -170,7 +190,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   _MetodoPagoItem(
                     value: 0,
                     groupValue: _metodoPago,
-                    label: "Tarjeta de crédito / débito",
+                    label: "Debit/Credit Card",
                     icon: Icons.credit_card_outlined,
                     onChanged: (v) => setState(() => _metodoPago = v!),
                   ),
@@ -186,7 +206,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   _MetodoPagoItem(
                     value: 2,
                     groupValue: _metodoPago,
-                    label: "Efectivo al recibir",
+                    label: "Cash to get",
                     icon: Icons.payments_outlined,
                     onChanged: (v) => setState(() => _metodoPago = v!),
                   ),
@@ -197,7 +217,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             SizedBox(height: 24),
 
             // Resumen del pedido
-            _SectionTitle(title: "Resumen del pedido"),
+            _SectionTitle(title: "Order Resume"),
             SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
@@ -334,6 +354,7 @@ class _CampoTexto extends StatelessWidget {
     required this.icon,
     required this.validator,
     this.keyboardType,
+    this.onTap,
   });
 
   final TextEditingController controller;
@@ -342,6 +363,7 @@ class _CampoTexto extends StatelessWidget {
   final IconData icon;
   final String? Function(String?) validator;
   final TextInputType? keyboardType;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -349,6 +371,7 @@ class _CampoTexto extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
+      onTap: onTap, //Se agrega para que se accione algo
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,

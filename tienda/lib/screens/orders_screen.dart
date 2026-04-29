@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:tienda/services/firestore_service.dart';
 
@@ -22,46 +24,47 @@ class OrdersScreen extends StatelessWidget {
               future: FirestoreService().getOrders(),
               builder: (context, snapshot) {
                 //Controlar el error
-                 if (snapshot.hasError) {
-                   return Text("Ha ocurrido un error ${snapshot.data}");
-                 }
+                if (snapshot.hasError) {
+                  return Text("Ha ocurrido un error ${snapshot.data}");
+                }
                 // //validar si existen datos
-                 if (!snapshot.hasData) {return Text("No existen datos");}
-
+                if (!snapshot.hasData) {
+                  return Text("No existen datos");
+                }
                 // //Mostrar datos
-                 final data = snapshot.data ?? [];
-                 return Text("Existen datos $data");
-                //if(snapshot.hasError){
-                //print(snapshot);
-                //}
-
-                //return SizedBox();
-
-
-
-
-
-
+                final data = snapshot.data ?? [];
+                
+                return Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final order = data[index];
+                      //print(order);
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Column(
+                            crossAxisAlignment: .start,
+                            children: [
+                              Text("ID: ${order.id}"),
+                              Text(
+                                "Did it at ${order.createdDate.toIso8601String()}",
+                              ),
+                              Divider(),
+                              Row(
+                                children: [
+                                  Expanded(child: Text("Total")),
+                                  Text("\$${order.total}"),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
-            ),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text("Id: juwoijKJKJlkjp4647we65f4s56df"),
-                    Text("Completed on April 26, 2026"),
-                    Divider(),
-                    Row(
-                      children: [
-                        Expanded(child: Text("Total")),
-                        Text("\$245.00"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
         ),
