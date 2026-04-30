@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:tienda/services/google_map_service.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -17,13 +17,17 @@ class MapScreenState extends State<MapScreen> {
       Completer<GoogleMapController>();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-2.1686932018915375, -79.90810294551765),
+    target: LatLng(-2.1676853297405576, -79.90471284357757),
     zoom: 10.4746,
   );
 
+  CameraPosition? _cameraPosition;
+  String _locationName = '--';
+  final _google_api_service = GoogleMapService();
+
   static const CameraPosition _kLake = CameraPosition(
     bearing: 192.8334901395799,
-    target: LatLng(-2.1686932018915375, -79.90810294551765),
+    target: LatLng(-2.1676853297405576, -79.90471284357757),
     tilt: 59.440717697143555,
     zoom: 19.151926040649414,
   );
@@ -43,40 +47,110 @@ class MapScreenState extends State<MapScreen> {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(position.latitude, position.longitude),
-            zoom: 5,
+            zoom: 10,
           ),
         ),
       );
       await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
     } catch (e) {
-      print("Ha ocurrido un error ${e}");
+      print("There is an error: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Address")),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      appBar: AppBar(
+        title: Text("Address", style: TextStyle(color: Colors.white)),
+        titleTextStyle: TextStyle(fontSize: 20),
+        centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),  //Al presionar no se vaya al lago sino donde se encuentra actualemnte
-        icon: const Icon(Icons.location_city),
+
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.terrain,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            onCameraMove: (position) {
+              // Nos da latitud y longitud
+              _cameraPosition = position;
+            },
+            onCameraIdle: () async {
+              // print("${_cameraPosition?.target.latitude}, ${_cameraPosition?.target.longitude}",);
+              final target = _cameraPosition?.target;
+              // Retorno temprano - early return
+              if (target == null) return;
+
+              final response = await _google_api_service.getAddress(lat: target.latitude, lng: target.longitude);
+              
+              // Dirección
+              final address = response.results?.firstOrNull?.formattedAddress;
+              // Estado o provincia
+              final city = response.results?.firstOrNull?.addressComponents; //.where(test);
+              print(city);
+
+              //Ciudad y provincia y que se autocomplete en el campo respectivo
+
+
+
+              //Obtener el país
+              // País
+
+              // final address = await GoogleMapService().getAddress(
+              //   lat: _cameraPosition!.target.latitude,
+              //   lng: _cameraPosition!.target.longitude,
+              // );
+              _locationName = address ?? "";
+
+              //"${_cameraPosition?.target.latitude}, ${_cameraPosition?.target.longitude}";
+              // if (address.isOk) {
+              //   _locationName = address.results.toString();
+              // }
+              // print(address);
+              setState(() {});
+            },
+            zoomControlsEnabled: false,
+            webCameraControlEnabled: false,
+          ), //Google Map
+          Positioned.fill(
+            child: Icon(Icons.location_on, size: 30, color: Colors.red),
+          ),
+        ],
+      ), // Stack
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getUserPosition,
+        child: Icon(Icons.my_location),
+        // label: const Text('To the lake!'),  //Al presionar no se vaya al lago sino donde se encuentra actualemnte
+        // icon: const Icon(Icons.location_city),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
+          spacing: 16,
+          children: [
+            Text("Place: $_locationName"),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(onPressed: () {
+                Navigator.pop(context, _locationName);
+              }, child: Text("Confirm")),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    // final GoogleMapController controller = await _controller.future;
-    // await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-    _getUserPosition();
-  }
+  // Future<void> _goToTheLake() async {
+  //   // final GoogleMapController controller = await _controller.future;
+  //   // await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  //   _getUserPosition();
+  // }
 }
 
 /// Determine the current position of the device.

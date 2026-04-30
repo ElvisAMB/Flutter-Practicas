@@ -157,11 +157,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               validator: (v) => (v == null || v.trim().isEmpty)
                   ? "Put your address"
                   : null,
-              onTap: () {
+              onTap: () async{
                 final route = MaterialPageRoute(
                   builder: (context) => MapScreen(),
                 );
-                Navigator.push(context, route);
+                final result = await Navigator.push(context, route);
+                if (result == null) return;
+                _direccionController.text = result;
               },
             ),
             SizedBox(height: 12),
