@@ -165,7 +165,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 if (result == null) return;
                 _direccionController.text = (result as List).first;
                 _ciudadController.text = result.last;
-                print(result);
               },
             ),
             SizedBox(height: 12),

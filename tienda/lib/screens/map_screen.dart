@@ -79,7 +79,6 @@ class MapScreenState extends State<MapScreen> {
               _cameraPosition = position;
             },
             onCameraIdle: () async {
-              // print("${_cameraPosition?.target.latitude}, ${_cameraPosition?.target.longitude}",);
               final target = _cameraPosition?.target;
               // Retorno temprano - early return
               if (target == null) return;
@@ -90,41 +89,25 @@ class MapScreenState extends State<MapScreen> {
               );
 
               // Dirección
-              final address = response.results?.firstOrNull?.formattedAddress;
-              // Estado o provincia
-              final components =
-                  response.results?.firstOrNull?.addressComponents ?? [];
-
+              final address = response.results?.firstOrNull?.formattedAddress
+                  ?.split(",")
+                  .firstOrNull;
               // Ciudad
-              final cityComponent = firstWhereOrNull(
-                components,
-                (c) =>
-                    c.types!.contains("locality") ||
-                    c.types!.contains("administrative_area_level_2"),
-              );
+              final city = response.results?.firstOrNull?.addressComponents
+                  ?.firstWhere((value) {
+                    return value.types?.contains("locality") ?? false;
+                  });
+              // provincia
+              final state = response.results?.firstOrNull?.addressComponents
+                  ?.firstWhere((value) {
+                    return value.types?.contains(
+                          "administrative_area_level_1",
+                        ) ??
+                        false;
+                  });
 
-              final provinceComponent = firstWhereOrNull(
-                components,
-                (c) => c.types!.contains("administrative_area_level_1"),
-              );
-
-              // final countryComponent = firstWhereOrNull(
-              //   components,
-              //   (c) => c.types!.contains("country"),
-              //   //c.types!.contains("administrative_area_level_2"),
-              // );
-
-              final city = cityComponent?.longName ?? '';
-              final province = provinceComponent?.longName ?? '';
-              //final country = countryComponent?.longName ?? '';
-
-              // print("Ciudad: $city");
-              // print("Provincia: $province");
-              // print("Country: $country");
-
-              _locationName = [address ?? "", city, province];
-              // _cityState = "$city - $province - $country";
-              // print(_locationName);
+              _locationName = [address ?? "","${city?.longName ?? ""}, ${state?.longName ?? ""}",];
+                            
               setState(() {});
             },
             zoomControlsEnabled: false,
@@ -138,8 +121,6 @@ class MapScreenState extends State<MapScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _getUserPosition,
         child: Icon(Icons.my_location),
-        // label: const Text('To the lake!'),  //Al presionar no se vaya al lago sino donde se encuentra actualemnte
-        // icon: const Icon(Icons.location_city),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -163,12 +144,6 @@ class MapScreenState extends State<MapScreen> {
       ),
     );
   }
-
-  // Future<void> _goToTheLake() async {
-  //   // final GoogleMapController controller = await _controller.future;
-  //   // await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  //   _getUserPosition();
-  // }
 }
 
 /// Determine the current position of the device.
@@ -211,11 +186,4 @@ Future<Position> _determinePosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
-}
-
-T? firstWhereOrNull<T>(List<T> list, bool Function(T) test) {
-  for (var item in list) {
-    if (test(item)) return item;
-  }
-  return null;
 }
