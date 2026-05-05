@@ -22,8 +22,8 @@ class MapScreenState extends State<MapScreen> {
   );
 
   CameraPosition? _cameraPosition;
-  String _locationName = '--';
-  final _google_api_service = GoogleMapService();
+  List<String> _locationName = [];
+  final _googleApiService = GoogleMapService();
 
   static const CameraPosition _kLake = CameraPosition(
     bearing: 192.8334901395799,
@@ -84,32 +84,47 @@ class MapScreenState extends State<MapScreen> {
               // Retorno temprano - early return
               if (target == null) return;
 
-              final response = await _google_api_service.getAddress(lat: target.latitude, lng: target.longitude);
-              
+              final response = await _googleApiService.getAddress(
+                lat: target.latitude,
+                lng: target.longitude,
+              );
+
               // Dirección
               final address = response.results?.firstOrNull?.formattedAddress;
               // Estado o provincia
-              final city = response.results?.firstOrNull?.addressComponents; //.where(test);
-              print(city);
+              final components =
+                  response.results?.firstOrNull?.addressComponents ?? [];
 
-              //Ciudad y provincia y que se autocomplete en el campo respectivo
+              // Ciudad
+              final cityComponent = firstWhereOrNull(
+                components,
+                (c) =>
+                    c.types!.contains("locality") ||
+                    c.types!.contains("administrative_area_level_2"),
+              );
 
+              final provinceComponent = firstWhereOrNull(
+                components,
+                (c) => c.types!.contains("administrative_area_level_1"),
+              );
 
-
-              //Obtener el país
-              // País
-
-              // final address = await GoogleMapService().getAddress(
-              //   lat: _cameraPosition!.target.latitude,
-              //   lng: _cameraPosition!.target.longitude,
+              // final countryComponent = firstWhereOrNull(
+              //   components,
+              //   (c) => c.types!.contains("country"),
+              //   //c.types!.contains("administrative_area_level_2"),
               // );
-              _locationName = address ?? "";
 
-              //"${_cameraPosition?.target.latitude}, ${_cameraPosition?.target.longitude}";
-              // if (address.isOk) {
-              //   _locationName = address.results.toString();
-              // }
-              // print(address);
+              final city = cityComponent?.longName ?? '';
+              final province = provinceComponent?.longName ?? '';
+              //final country = countryComponent?.longName ?? '';
+
+              // print("Ciudad: $city");
+              // print("Provincia: $province");
+              // print("Country: $country");
+
+              _locationName = [address ?? "", city, province];
+              // _cityState = "$city - $province - $country";
+              // print(_locationName);
               setState(() {});
             },
             zoomControlsEnabled: false,
@@ -133,12 +148,15 @@ class MapScreenState extends State<MapScreen> {
           crossAxisAlignment: .start,
           spacing: 16,
           children: [
-            Text("Place: $_locationName"),
+            Text("Place: ${_locationName.join(" ")}"),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(onPressed: () {
-                Navigator.pop(context, _locationName);
-              }, child: Text("Confirm")),
+              child: FilledButton(
+                onPressed: () {
+                  Navigator.pop(context, _locationName);
+                },
+                child: Text("Confirm"),
+              ),
             ),
           ],
         ),
@@ -193,4 +211,11 @@ Future<Position> _determinePosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
+}
+
+T? firstWhereOrNull<T>(List<T> list, bool Function(T) test) {
+  for (var item in list) {
+    if (test(item)) return item;
+  }
+  return null;
 }

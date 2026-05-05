@@ -18,7 +18,7 @@ class OrdersScreen extends StatelessWidget {
           mainAxisAlignment: .start,
           crossAxisAlignment: .start,
           children: [
-            Text("My Orders", style: TextStyle(fontSize: 34)),
+            Text("My Orders", style: TextStyle(fontSize: 30)),
             Text("Check and admin your orders"),
             FutureBuilder(
               future: FirestoreService().getOrders(),
