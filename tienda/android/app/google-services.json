@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:95672289191:android:e07cb4603f681364bdd882",
+        "mobilesdk_app_id": "1:95672289191:android:32f356d31279b548bdd882",
         "android_client_info": {
-          "package_name": "com.example.tienda"
+          "package_name": "com.eela.tienda"
         }
       },
       "oauth_client": [],

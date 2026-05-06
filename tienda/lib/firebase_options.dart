@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAQyusb_0SFEmK8HRHX9UZOIIkj54su4xc',
-    appId: '1:95672289191:android:e07cb4603f681364bdd882',
+    appId: '1:95672289191:android:32f356d31279b548bdd882',
     messagingSenderId: '95672289191',
     projectId: 'tienda-eela',
     storageBucket: 'tienda-eela.firebasestorage.app',
@@ -60,16 +60,16 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCLvEn7ttWtzuDMaherstKap3TpBWzH7GI',
-    appId: '1:95672289191:ios:42e726419ec8fb89bdd882',
+    appId: '1:95672289191:ios:0419c704990e1aaabdd882',
     messagingSenderId: '95672289191',
     projectId: 'tienda-eela',
     storageBucket: 'tienda-eela.firebasestorage.app',
-    iosBundleId: 'com.example.tienda',
+    iosBundleId: 'com.eela.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCLvEn7ttWtzuDMaherstKap3TpBWzH7GI',
-    appId: '1:95672289191:ios:42e726419ec8fb89bdd882',
+    appId: '1:95672289191:ios:d840a660c9373cc5bdd882',
     messagingSenderId: '95672289191',
     projectId: 'tienda-eela',
     storageBucket: 'tienda-eela.firebasestorage.app',
@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'tienda-eela.firebasestorage.app',
     measurementId: 'G-JZHRMKGWLL',
   );
+
 }

@@ -33,10 +33,11 @@ class OrdersScreen extends StatelessWidget {
                 }
                 // //Mostrar datos
                 final data = snapshot.data ?? [];
-                
+
                 return Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
+                    itemCount: data.length-1, //Se agrega para quitar el error de pantalla RangeError (index): Index out of range
                     itemBuilder: (context, index) {
                       final order = data[index];
                       //print(order);
@@ -54,7 +55,9 @@ class OrdersScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   Expanded(child: Text("Total")),
-                                  Text("\$${order.total}"),
+                                  Text(
+                                    "\$${order.total.toStringAsFixed(2)}",
+                                  ),
                                 ],
                               ),
                             ],

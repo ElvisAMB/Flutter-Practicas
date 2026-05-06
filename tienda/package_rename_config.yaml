@@ -1,0 +1,16 @@
+package_rename_config:
+  android:
+    app_name: "My Store" # Display name
+    package_name: "com.eela.tienda" # Package name
+    override_old_package: "com.example.tienda" # Optional: Cleans up old folder structure
+    lang: "kotlin" # Optional: "kotlin" (default) or "java"
+
+  ios:
+    app_name: "My Store" # Display name
+    bundle_name: "My App" # Bundle name
+    package_name: "com.eela.app" # Product Bundle Identifier
+
+  web:
+    app_name: "My Store" # App title & PWA name
+    short_app_name: "tienda" # PWA short name (defaults to app_name)
+    description: "My Store" # Web app description

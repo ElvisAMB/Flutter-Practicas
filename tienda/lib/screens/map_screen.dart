@@ -95,7 +95,7 @@ class MapScreenState extends State<MapScreen> {
               // Ciudad
               final city = response.results?.firstOrNull?.addressComponents
                   ?.firstWhere((value) {
-                    return value.types?.contains("locality") ?? false;
+                    return value.types?.contains("administrative_area_level_2") ?? false;
                   });
               // provincia
               final state = response.results?.firstOrNull?.addressComponents
