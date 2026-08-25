@@ -285,3 +285,66 @@ def aplicar_filtros_e_inmovilizar_lote(ruta_archivo: str, configuracion_hojas: d
         print(f"❌ Error de permisos: El archivo '{ruta_archivo}' está abierto en Excel. Ciérralo.")
     except Exception as error:
         print(f"❌ Ocurrió un error inesperado durante el procesamiento por lote: {error}")
+
+def copiar_registros_filtrados_lote(ruta_archivo: str, hoja_origen: str, operaciones_filtrado: list):
+    """
+    Optimiza recursos abriendo el archivo una sola vez.
+    Aplica múltiples filtros en memoria sobre una hoja de origen y los guarda en pestañas separadas.
+
+    Parámetros:
+        ruta_archivo (str): Ruta del archivo Excel (.xlsx).
+        hoja_origen (str): Nombre de la hoja base desde donde se leerán los datos.
+        operaciones_filtrado (list): Lista de diccionarios con la configuración de cada filtro.
+    """
+    if not os.path.exists(ruta_archivo) or os.path.getsize(ruta_archivo) == 0:
+        print(f"❌ Error: El archivo '{ruta_archivo}' no existe o está vacío.")
+        return
+
+    try:
+        print(f"📂 Cargando hoja de origen '{hoja_origen}' desde: {ruta_archivo}")
+        # 1. Leer la hoja origen una sola vez
+        df_origen = pd.read_excel(ruta_archivo, sheet_name=hoja_origen, engine='openpyxl')
+        
+        # Diccionario para almacenar los DataFrames filtrados listos para guardar
+        resultados_a_escribir = {}
+
+        # 2. Procesar cada filtro directamente en la RAM
+        for op in operaciones_filtrado:
+            columna = op['nombre_columna']
+            valor = str(op['valor_columna']).lower()
+            destino = op['hoja_destino']
+
+            # Validar existencia de la columna
+            if columna not in df_origen.columns:
+                print(f"  ❌ Error: La columna '{columna}' no existe en '{hoja_origen}'. Saltando este filtro.")
+                continue
+
+            # Filtrar los registros comparando de forma segura como texto en minúsculas
+            df_filtrado = df_origen[df_origen[columna].astype(str).str.lower() == valor]
+
+            if df_filtrado.empty:
+                print(f"  ⚠️ Advertencia: No se encontraron registros con '{columna}' = '{valor}' para la hoja '{destino}'.")
+                # Guardamos un DataFrame vacío con los mismos encabezados para no romper estructuras
+                resultados_a_escribir[destino] = pd.DataFrame(columns=df_origen.columns)
+            else:
+                resultados_a_escribir[destino] = df_filtrado
+                print(f"  🧠 Filtrado listo en RAM: {len(df_filtrado)} registros preparados para '{destino}'.")
+
+        # 3. Guardar todas las hojas generadas en un solo bloque seguro de escritura
+        if resultados_a_escribir:
+            print(f"💾 Escribiendo todas las nuevas hojas filtradas en el disco...")
+            with pd.ExcelWriter(ruta_archivo, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+                for hoja_destino, df_datos in resultados_a_escribir.items():
+                    df_datos.to_excel(writer, sheet_name=hoja_destino, index=False)
+            print(f"🎉 ¡Todas las hojas filtradas se crearon con éxito en '{ruta_archivo}'!")
+        else:
+            print("⚠️ No se realizó ninguna escritura porque no hubo filtros válidos.")
+
+    except zipfile.BadZipFile:
+        print(f"❌ Error crítico: El archivo '{ruta_archivo}' está corrupto (BadZipFile).")
+    except PermissionError:
+        print(f"❌ Error de permisos: El archivo '{ruta_archivo}' está abierto en Excel. Ciérralo.")
+    except Exception as error:
+        print(f"❌ Ocurrió un error inesperado al filtrar el lote: {error}")
+
+

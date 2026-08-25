@@ -5,7 +5,7 @@ from util_excel import cerrar_excel_abierto, establecer_ancho_columnas_excel, in
 from util import limpiar_consola
 from order_sheet import ordenar_contenido_hoja_excel
 from merge_excel_files import unir_hojas_excel, unir_hojas_excel_cadena
-from filter import aplicar_filtros_e_inmovilizar_lote, aplicar_filtros_excel, aplicar_filtros_excel_validado, copiar_registros_filtrados, inmovilizar_filas_por_hoja, mostrar_columnas_y_registros
+from filter import aplicar_filtros_e_inmovilizar_lote, aplicar_filtros_excel, aplicar_filtros_excel_validado, copiar_registros_filtrados, copiar_registros_filtrados_lote, inmovilizar_filas_por_hoja, mostrar_columnas_y_registros
 from copy_sheet import copiar_hoja_a_archivo_existente, copiar_hojas_a_destino_lote, copiar_primer_hoja_a_nuevo_archivo
 from datetime import datetime
 
@@ -51,7 +51,6 @@ if __name__ == '__main__':
     ##########################################################################
            
     if eliminar_archivo(nombre_nuevo_archivo):
-        #cerrar_excel_abierto(nombre_nuevo_archivo)
         copiar_primer_hoja_a_nuevo_archivo(
             archivo_origen=archivo_catalogo_ruta,
             hoja_origen='TotalCtasSerProvPasan',
@@ -139,8 +138,6 @@ if __name__ == '__main__':
             operaciones_union=secuencia_uniones
         )
         
-        
-        
         # # # ⚠️ Lista de las columnas exactas que quieres ver
         # # COLUMNAS = ['Name', 'Enabled', 'SamAccountName', 'Email Corporativo']
         
@@ -158,23 +155,44 @@ if __name__ == '__main__':
         
         #----------------------------------------------------------------------------------------------------------------- 
         
-        copiar_registros_filtrados(
-            ruta_archivo= nombre_nuevo_archivo,
-            hoja_origen = 'AllAccounts',
-            nombre_columna = 'Enabled',
-            valor_columna = '0.0',
-            hoja_destino = "AccountsDisabled"
+        # copiar_registros_filtrados(
+        #     ruta_archivo= nombre_nuevo_archivo,
+        #     hoja_origen = 'AllAccounts',
+        #     nombre_columna = 'Enabled',
+        #     valor_columna = '0.0',
+        #     hoja_destino = "AccountsDisabled"
+        # )
+        
+        # copiar_registros_filtrados(
+        #     ruta_archivo= nombre_nuevo_archivo,
+        #     hoja_origen = 'AllAccounts',
+        #     nombre_columna = 'Enabled',
+        #     valor_columna = '1.0',
+        #     hoja_destino = "AccountsEnabled"
+        # )
+        
+        # 1. Configuras la lista de criterios de filtrado
+        configuracion_filtros = [
+            {
+                'nombre_columna': 'Enabled',
+                'valor_columna': '0.0',
+                'hoja_destino': 'AccountsDisabled'
+            },
+            {
+                'nombre_columna': 'Enabled',
+                'valor_columna': '1.0',
+                'hoja_destino': 'AccountsEnabled'
+            }
+        ]
+
+        # 2. Ejecutas la extracción optimizada en una sola línea
+        copiar_registros_filtrados_lote(
+            ruta_archivo=nombre_nuevo_archivo,
+            hoja_origen='AllAccounts',
+            operaciones_filtrado=configuracion_filtros
         )
         
-        copiar_registros_filtrados(
-            ruta_archivo= nombre_nuevo_archivo,
-            hoja_origen = 'AllAccounts',
-            nombre_columna = 'Enabled',
-            valor_columna = '1.0',
-            hoja_destino = "AccountsEnabled"
-        )
-        
-        cerrar_excel_abierto(nombre_nuevo_archivo)
+        #cerrar_excel_abierto(nombre_nuevo_archivo)
         
         unir_hojas_excel(
             ruta_archivo=nombre_nuevo_archivo,
