@@ -232,3 +232,101 @@ def validar_y_formato_celda_con_color(
 #         hoja_nombre=HOJA_LECTURA,
 #         columna_identificador=COLUMNA_ID
 #     )
+
+# from openpyxl import load_workbook
+# from openpyxl.styles import PatternFill
+
+from openpyxl import load_workbook
+from copy import copy
+from openpyxl.styles import PatternFill
+
+
+def validar_dos_campos_excel(
+    archivo,
+    hoja,
+    campo_1,
+    campo_2,
+    campo_a_pintar,
+    fila_inicio=2
+):
+    """
+    Compara dos campos de una hoja Excel y pinta el campo indicado
+    cuando sus valores son diferentes.
+
+    Parámetros:
+        archivo (str):
+            Ruta del archivo Excel.
+
+        hoja (str):
+            Nombre de la hoja que se desea procesar.
+
+        campo_1 (str):
+            Letra de la primera columna a comparar. Ej: "A".
+
+        campo_2 (str):
+            Letra de la segunda columna a comparar. Ej: "B".
+
+        campo_a_pintar (str):
+            Letra de la columna que se pintará cuando los valores
+            sean diferentes. Ej: "B".
+
+        fila_inicio (int):
+            Fila desde la cual comienzan los datos. Por defecto: 2.
+
+    Retorna:
+        int: cantidad de diferencias encontradas.
+    """
+
+    # Cargar el libro manteniendo las demás hojas
+    wb = load_workbook(archivo)
+
+    # Verificar que exista la hoja
+    if hoja not in wb.sheetnames:
+        wb.close()
+        raise ValueError(
+            f"La hoja '{hoja}' no existe en el archivo. "
+            f"Hojas disponibles: {wb.sheetnames}"
+        )
+
+    ws = wb[hoja]
+
+    # Color de fondo #FFCDD2
+    fill_diferente = PatternFill(
+        fill_type="solid",
+        fgColor="FF7F50"
+    )
+
+    diferencias = 0
+
+    # Recorrer las filas utilizadas de la hoja
+    for fila in range(fila_inicio, ws.max_row + 1):
+
+        valor_1 = ws[f"{campo_1}{fila}"].value
+        valor_2 = ws[f"{campo_2}{fila}"].value
+
+        # Verificar que ambos campos tengan datos
+        campo_1_tiene_datos = (
+            valor_1 is not None and str(valor_1).strip() != ""
+        )
+
+        campo_2_tiene_datos = (
+            valor_2 is not None and str(valor_2).strip() != ""
+        )
+
+         # Comparar únicamente cuando ambos campos tienen datos
+        if campo_1_tiene_datos and campo_2_tiene_datos:
+
+            if valor_1 != valor_2:
+
+                celda = ws[f"{campo_a_pintar}{fila}"]
+
+                # Aplicar únicamente el color de fondo
+                celda.fill = copy(fill_diferente)
+
+                diferencias += 1
+
+    # Sobrescribir el archivo original
+    wb.save(archivo)
+    wb.close()
+
+    return diferencias

@@ -1,5 +1,4 @@
 import zipfile
-
 import pandas as pd
 import win32com.client
 import openpyxl
@@ -8,37 +7,42 @@ from openpyxl import load_workbook
 import time
 import psutil
 from openpyxl.utils import get_column_letter
+from pathlib import Path
 
-def ocultar_hoja_excel(archivo_ruta: str, nombre_hoja_a_ocultar: str, modo_oculto: str = 'hidden'):
+
+def ocultar_hoja_excel(
+    archivo_ruta: str, nombre_hoja_a_ocultar: str, modo_oculto: str = "hidden"
+):
     """
     Oculta una hoja específica de un archivo Excel existente y guarda los cambios.
 
     Args:
         archivo_ruta (str): Ruta completa al archivo Excel.
         nombre_hoja_a_ocultar (str): Nombre exacto de la hoja que se quiere ocultar.
-        modo_oculto (str): Modo de ocultación. Opciones: 
-                           'hidden' (Ocultar normal, fácil de desocultar) o 
+        modo_oculto (str): Modo de ocultación. Opciones:
+                           'hidden' (Ocultar normal, fácil de desocultar) o
                            'very_hidden' (Muy oculto, requiere VBA para desocultar).
     """
-    
+
     # Mapeo de modos de texto a valores numéricos de openpyxl
-    MODOS = {
-        'hidden': 'hidden',
-        'very_hidden': 'veryHidden'
-    }
+    MODOS = {"hidden": "hidden", "very_hidden": "veryHidden"}
 
     if modo_oculto.lower() not in MODOS:
-        print(f"❌ Advertencia: Modo de ocultación '{modo_oculto}' no reconocido. Usando 'hidden'.")
-        modo_oculto = 'hidden'
+        print(
+            f"❌ Advertencia: Modo de ocultación '{modo_oculto}' no reconocido. Usando 'hidden'."
+        )
+        modo_oculto = "hidden"
 
     try:
         # 1. Cargar el libro de trabajo (workbook)
         print(f"⚙️  Cargando el archivo: {archivo_ruta}...")
         libro = openpyxl.load_workbook(archivo_ruta)
-        
+
         # 2. Seleccionar la hoja a ocultar
         if nombre_hoja_a_ocultar not in libro.sheetnames:
-            print(f"❌ Error: La hoja '{nombre_hoja_a_ocultar}' no existe en el archivo.")
+            print(
+                f"❌ Error: La hoja '{nombre_hoja_a_ocultar}' no existe en el archivo."
+            )
             return
 
         hoja = libro[nombre_hoja_a_ocultar]
@@ -49,10 +53,12 @@ def ocultar_hoja_excel(archivo_ruta: str, nombre_hoja_a_ocultar: str, modo_ocult
 
         # 4. Guardar el libro de trabajo con los cambios
         libro.save(archivo_ruta)
-        
+
         print("\n" + "-" * 60)
         print("🎉 Éxito al ocultar hoja:")
-        print(f"   La hoja '{nombre_hoja_a_ocultar}' ha sido configurada como '{modo_oculto.upper()}'.")
+        print(
+            f"   La hoja '{nombre_hoja_a_ocultar}' ha sido configurada como '{modo_oculto.upper()}'."
+        )
         print(f"   Archivo modificado: {os.path.abspath(archivo_ruta)}")
         print("-" * 60)
 
@@ -62,23 +68,24 @@ def ocultar_hoja_excel(archivo_ruta: str, nombre_hoja_a_ocultar: str, modo_ocult
         print(f"❌ Ocurrió un error: {e}")
         print("   Asegúrese de que el archivo no esté abierto por otra aplicación.")
 
+
 # ## --- Ejemplo de Uso de la Función ---
 
 # if __name__ == '__main__':
 #     # ⚠️ REQUISITO: pip install openpyxl
-    
+
 #     ARCHIVO_MAESTRO = 'Reporte_Final_Seguridad.xlsx'
 #     HOJA_A_ESCONDER = 'Datos_Sensibles'
-    
+
 #     print("Iniciando la ocultación de hoja...")
-    
+
 #     # Ocultación simple ('hidden'): el usuario puede desocultar desde el menú de Excel.
 #     ocultar_hoja_excel(
 #         archivo_ruta=ARCHIVO_MAESTRO,
 #         nombre_hoja_a_ocultar=HOJA_A_ESCONDER,
 #         modo_oculto='hidden'
 #     )
-    
+
 #     # Ocultación avanzada ('very_hidden'): requiere código VBA para desocultar.
 #     # ocultar_hoja_excel(
 #     #     archivo_ruta=ARCHIVO_MAESTRO,
@@ -86,13 +93,14 @@ def ocultar_hoja_excel(archivo_ruta: str, nombre_hoja_a_ocultar: str, modo_ocult
 #     #     modo_oculto='very_hidden'
 #     # )
 
+
 def cerrar_excel_abierto(ruta_archivo: str):
     """
     Cierra un archivo Excel abierto en la aplicación Excel (si lo está),
     guardando los cambios antes de cerrarlo.
-    
+
     Requiere: pywin32 (instalar con `pip install pywin32`)
-    
+
     Parámetros:
         ruta_archivo (str): Ruta completa del archivo Excel a cerrar.
     """
@@ -110,7 +118,7 @@ def cerrar_excel_abierto(ruta_archivo: str):
     for wb in excel.Workbooks:
         if os.path.abspath(wb.FullName).lower() == ruta_absoluta.lower():
             print(f"🧩 Guardando y cerrando: {wb.Name}")
-            #######wb.Save()       # Guardar cambios
+            wb.Save()  # Guardar cambios
             wb.Close(SaveChanges=True)  # Cerrar archivo
             print(f"✅ Archivo cerrado correctamente: {ruta_archivo}")
             break
@@ -125,10 +133,11 @@ def cerrar_excel_abierto(ruta_archivo: str):
     # Liberar recursos COM
     del excel
 
+
 # def inmovilizar_fila(ruta_archivo: str, nombre_hoja: str,freeze_panes_row: str="A2"):
 #     """
 #     Inmoviliza (congela) la primera fila de una hoja específica en un archivo Excel existente.
-    
+
 #     Parámetros:
 #         ruta_archivo (str): Ruta del archivo Excel.
 #         nombre_hoja (str): Nombre de la hoja en la cual se quiere inmovilizar la primera fila.
@@ -152,6 +161,7 @@ def cerrar_excel_abierto(ruta_archivo: str):
 #     wb.save(ruta_archivo)
 #     print(f"✅ Se inmovilizó la fila {freeze_panes_row} de la hoja '{nombre_hoja}'.")
 
+
 def inmovilizar_fila(ruta_archivo: str, nombre_hoja: str, freeze_panes_row: str = "A2"):
     """
     Inmoviliza (congela) la primera fila de una hoja específica en un archivo Excel existente.
@@ -167,8 +177,10 @@ def inmovilizar_fila(ruta_archivo: str, nombre_hoja: str, freeze_panes_row: str 
 
         # Verificar que la hoja exista
         if nombre_hoja not in wb.sheetnames:
-            wb.close() # Cerrar el flujo antes de lanzar el error
-            raise ValueError(f"La hoja '{nombre_hoja}' no existe en el archivo '{ruta_archivo}'.")
+            wb.close()  # Cerrar el flujo antes de lanzar el error
+            raise ValueError(
+                f"La hoja '{nombre_hoja}' no existe en el archivo '{ruta_archivo}'."
+            )
 
         # Seleccionar la hoja e inmovilizar
         ws = wb[nombre_hoja]
@@ -177,10 +189,14 @@ def inmovilizar_fila(ruta_archivo: str, nombre_hoja: str, freeze_panes_row: str 
         # Guardar y cerrar de forma segura
         wb.save(ruta_archivo)
         wb.close()
-        print(f"✅ Se inmovilizó la fila {freeze_panes_row} de la hoja '{nombre_hoja}'.")
+        print(
+            f"✅ Se inmovilizó la fila {freeze_panes_row} de la hoja '{nombre_hoja}'."
+        )
 
     except zipfile.BadZipFile:
-        print(f"❌ Error crítico: '{ruta_archivo}' no es un archivo zip válido (está corrupto).")
+        print(
+            f"❌ Error crítico: '{ruta_archivo}' no es un archivo zip válido (está corrupto)."
+        )
         # Opcional: Eliminar el archivo dañado para que no cause problemas en la siguiente ejecución
         try:
             os.remove(ruta_archivo)
@@ -189,10 +205,12 @@ def inmovilizar_fila(ruta_archivo: str, nombre_hoja: str, freeze_panes_row: str 
             pass
 
     except PermissionError:
-        print(f"❌ Error de permisos: El archivo '{ruta_archivo}' está abierto en Microsoft Excel. Ciérralo.")
-        
+        print(
+            f"❌ Error de permisos: El archivo '{ruta_archivo}' está abierto en Microsoft Excel. Ciérralo."
+        )
+
     except Exception as e:
-        print(f"❌ Ocurrió un error inesperado: {e}")
+        print(f"❌ Ocurrió un error inesperado en inmovilizar_fila: {e}")
 
 
 def eliminar_archivo_excel(ruta_archivo: str, reintentos: int = 3):
@@ -231,7 +249,9 @@ def eliminar_archivo_excel(ruta_archivo: str, reintentos: int = 3):
             print(f"🗑️ Archivo eliminado correctamente: {ruta_absoluta}")
             return
         except PermissionError:
-            print(f"⚠️ El archivo está en uso, reintentando ({intento+1}/{reintentos})...")
+            print(
+                f"⚠️ El archivo está en uso, reintentando ({intento+1}/{reintentos})..."
+            )
             time.sleep(1)
         except FileNotFoundError:
             print("❌ El archivo no existe o ya fue eliminado.")
@@ -241,10 +261,12 @@ def eliminar_archivo_excel(ruta_archivo: str, reintentos: int = 3):
             return
 
     # === Paso 3: Forzar liberación si sigue bloqueado ===
-    print("⚠️ No se pudo eliminar después de varios intentos. Verificando procesos Excel...")
+    print(
+        "⚠️ No se pudo eliminar después de varios intentos. Verificando procesos Excel..."
+    )
 
-    for proceso in psutil.process_iter(['name']):
-        if proceso.info['name'] and 'EXCEL.EXE' in proceso.info['name'].upper():
+    for proceso in psutil.process_iter(["name"]):
+        if proceso.info["name"] and "EXCEL.EXE" in proceso.info["name"].upper():
             proceso.terminate()
             print("🛑 Proceso de Excel cerrado a la fuerza.")
             time.sleep(1)
@@ -255,36 +277,35 @@ def eliminar_archivo_excel(ruta_archivo: str, reintentos: int = 3):
     except Exception as e:
         print(f"❌ No se pudo eliminar el archivo: {e}")
 
+
 def establecer_ancho_columnas(
-    archivo_ruta: str, 
-    hoja_nombre: str, 
-    columnas_ancho: dict
+    archivo_ruta: str, hoja_nombre: str, columnas_ancho: dict
 ):
     """
-    Establece un ancho específico a un conjunto de columnas de una hoja de Excel 
+    Establece un ancho específico a un conjunto de columnas de una hoja de Excel
     y sobrescribe esa hoja, manteniendo el resto de hojas intactas.
 
     Args:
         archivo_ruta (str): Ruta del archivo Excel existente.
         hoja_nombre (str): Nombre de la hoja a modificar.
-        columnas_ancho (dict): Diccionario donde la clave es el nombre de la columna 
+        columnas_ancho (dict): Diccionario donde la clave es el nombre de la columna
                                y el valor es el ancho (e.g., {'Nombre': 20, 'ID': 10}).
     """
-    
+
     try:
         # 1. Cargar TODAS las hojas del archivo
         print(f"⚙️  Cargando todas las hojas del archivo '{archivo_ruta}'...")
         xls = pd.ExcelFile(archivo_ruta)
         # Diccionario con todas las hojas: {'NombreHoja': DataFrame}
         diccionario_hojas = pd.read_excel(xls, sheet_name=xls.sheet_names)
-        
+
         if hoja_nombre not in diccionario_hojas:
             print(f"❌ Error: La hoja '{hoja_nombre}' no se encontró en el archivo.")
             return
 
         df_a_modificar = diccionario_hojas[hoja_nombre]
         print(f"✅ Hoja '{hoja_nombre}' cargada. Total de filas: {len(df_a_modificar)}")
-        
+
     except FileNotFoundError:
         print(f"❌ Error: Archivo no encontrado en la ruta: {archivo_ruta}")
         return
@@ -293,41 +314,49 @@ def establecer_ancho_columnas(
         return
 
     # 2. Guardar TODAS las hojas de nuevo (Sobreescritura con preservación)
-    print(f"⚙️  Aplicando ancho a la hoja '{hoja_nombre}' y reescribiendo el archivo...")
-    
+    print(
+        f"⚙️  Aplicando ancho a la hoja '{hoja_nombre}' y reescribiendo el archivo..."
+    )
+
     try:
         # Usamos mode='w' (write/escribir) con engine='xlsxwriter' (necesario para formatos)
-        with pd.ExcelWriter(archivo_ruta, engine='xlsxwriter', mode='w') as writer:
-            
+        with pd.ExcelWriter(archivo_ruta, engine="xlsxwriter", mode="w") as writer:
+
             # Recorrer todas las hojas originales
             for nombre_hoja, df in diccionario_hojas.items():
-                
+
                 # Escribir el DataFrame en la hoja
                 df.to_excel(writer, sheet_name=nombre_hoja, index=False)
-                
+
                 # 3. Aplicar ancho de columna SOLO si es la hoja especificada
                 if nombre_hoja == hoja_nombre:
                     # Acceder al objeto Worksheet de xlsxwriter
                     worksheet = writer.sheets[nombre_hoja]
-                    
+
                     # Mapear los nombres de columna a sus índices (0, 1, 2, ...)
                     columnas = df.columns.tolist()
-                    
+
                     for nombre_columna, ancho in columnas_ancho.items():
                         try:
                             # Obtener el índice (número) de la columna
                             col_indice = columnas.index(nombre_columna)
-                            
+
                             # Establecer el ancho de la columna (col_start, col_end, width)
                             # Se usa set_column(col_indice, col_indice, ancho)
                             worksheet.set_column(col_indice, col_indice, ancho)
-                            print(f"   -> Ancho {ancho} aplicado a columna '{nombre_columna}'.")
+                            print(
+                                f"   -> Ancho {ancho} aplicado a columna '{nombre_columna}'."
+                            )
                         except ValueError:
-                            print(f"   ⚠️ Advertencia: Columna '{nombre_columna}' no encontrada en la hoja.")
-                            
+                            print(
+                                f"   ⚠️ Advertencia: Columna '{nombre_columna}' no encontrada en la hoja."
+                            )
+
         print("\n" + "-" * 60)
         print("🎉 Éxito en la operación:")
-        print(f"   El ancho de las columnas en la hoja '{hoja_nombre}' ha sido actualizado.")
+        print(
+            f"   El ancho de las columnas en la hoja '{hoja_nombre}' ha sido actualizado."
+        )
         print(f"   El resto de hojas se mantienen intactas.")
         print(f"   Archivo modificado: {os.path.abspath(archivo_ruta)}")
         print("-" * 60)
@@ -335,13 +364,14 @@ def establecer_ancho_columnas(
     except Exception as e:
         print(f"❌ Error al escribir en el archivo: {e}")
 
+
 ## --- Ejemplo de Uso de la Función ---
 
 # if __name__ == '__main__':
 #     # Define tus parámetros.
 #     ARCHIVO_MAESTRO = 'Reporte_Consolidado.xlsx'
 #     HOJA_A_MODIFICAR = 'Datos_Principales'
-    
+
 #     # Diccionario: {'Nombre exacto de la columna': Ancho deseado}
 #     ANCHO_COLUMNAS = {
 #         'Clave_Unificada': 30,
@@ -349,33 +379,32 @@ def establecer_ancho_columnas(
 #         'ID_SistemaA': 15,
 #         'Fecha Creacion': 18
 #     }
-    
+
 #     print("Iniciando el proceso de ajuste de ancho de columnas...")
-    
+
 #     # Requisitos: pip install pandas openpyxl xlsxwriter
-    
+
 #     establecer_ancho_columnas(
 #         archivo_ruta=ARCHIVO_MAESTRO,
 #         hoja_nombre=HOJA_A_MODIFICAR,
 #         columnas_ancho=ANCHO_COLUMNAS
 #     )
 
+
 def establecer_ancho_columnas_excel(
-    archivo_ruta: str, 
-    hoja_nombre: str, 
-    columnas_ancho: dict
+    archivo_ruta: str, hoja_nombre: str, columnas_ancho: dict
 ):
     """
-    Establece un ancho específico a un conjunto de columnas de una hoja de Excel, 
+    Establece un ancho específico a un conjunto de columnas de una hoja de Excel,
     preservando el resto de hojas y todas las configuraciones previas (filtros, colores).
 
     Args:
         archivo_ruta (str): Ruta del archivo Excel existente.
         hoja_nombre (str): Nombre de la hoja a modificar.
-        columnas_ancho (dict): Diccionario donde la clave es el nombre EXACTO de la columna 
+        columnas_ancho (dict): Diccionario donde la clave es el nombre EXACTO de la columna
                                y el valor es el ancho deseado (e.g., {'Nombre': 20, 'ID': 10}).
     """
-    
+
     try:
         # 1. Cargar el Workbook existente (openpyxl preserva la estructura del archivo)
         print(f"⚙️  Cargando archivo: '{archivo_ruta}'...")
@@ -393,37 +422,43 @@ def establecer_ancho_columnas_excel(
         # Se asume que la primera fila (row 1) contiene los encabezados.
         # openpyxl usa un índice basado en 1 (fila 1, columna 1)
         encabezados = [cell.value for cell in worksheet[1]]
-        
+
         columna_mapa = {}
         for idx, header in enumerate(encabezados):
             if header in columnas_ancho:
                 # get_column_letter convierte el índice basado en 1 (idx + 1) a la letra (A, B, ...)
                 col_letra = get_column_letter(idx + 1)
                 columna_mapa[header] = col_letra
-        
+
         # 4. Aplicar el ancho de columna
         print("⚙️  Estableciendo ancho de columnas...")
-        
+
         columnas_modificadas = 0
         for nombre_columna, ancho in columnas_ancho.items():
             if nombre_columna in columna_mapa:
                 col_letra = columna_mapa[nombre_columna]
-                
+
                 # Modificar la dimensión de la columna para establecer el ancho
                 worksheet.column_dimensions[col_letra].width = ancho
                 columnas_modificadas += 1
-                print(f"   -> Ancho {ancho} aplicado a columna '{nombre_columna}' ({col_letra}).")
+                print(
+                    f"   -> Ancho {ancho} aplicado a columna '{nombre_columna}' ({col_letra})."
+                )
             else:
-                print(f"   ⚠️ Advertencia: Columna '{nombre_columna}' no encontrada en la hoja.")
-        
+                print(
+                    f"   ⚠️ Advertencia: Columna '{nombre_columna}' no encontrada en la hoja."
+                )
+
         if columnas_modificadas == 0:
-            print("⚠️ Advertencia: Ninguna de las columnas especificadas fue encontrada y modificada.")
+            print(
+                "⚠️ Advertencia: Ninguna de las columnas especificadas fue encontrada y modificada."
+            )
             return
 
         # 5. Guardar el archivo (sobrescribe el existente)
         # openpyxl guarda los cambios realizados en el objeto workbook, preservando el resto.
         workbook.save(archivo_ruta)
-        
+
         print("\n" + "-" * 60)
         print("🎉 Éxito en la operación:")
         print(f"   El ancho de las columnas en '{hoja_nombre}' ha sido ajustado.")
@@ -434,7 +469,8 @@ def establecer_ancho_columnas_excel(
     except FileNotFoundError:
         print(f"❌ Error: Archivo no encontrado en la ruta: {archivo_ruta}")
     except Exception as e:
-        print(f"❌ Ocurrió un error inesperado: {e}")
+        print(f"❌ Ocurrió un error inesperado en establecer_ancho_columnas_excel: {e}")
+
 
 ## --- Ejemplo de Uso de la Función ---
 
@@ -442,7 +478,7 @@ def establecer_ancho_columnas_excel(
 #     # Define tus parámetros.
 #     ARCHIVO_MAESTRO = 'Reporte_De_Ventas.xlsx'
 #     HOJA_A_MODIFICAR = 'Datos_Transacciones'
-    
+
 #     # Diccionario: {'Nombre exacto de la columna': Ancho deseado}
 #     ANCHO_COLUMNAS = {
 #         'ID_Transaccion': 15,
@@ -450,14 +486,342 @@ def establecer_ancho_columnas_excel(
 #         'Fecha de Venta': 18,
 #         'Monto Total': 15
 #     }
-    
+
 #     print("Iniciando el proceso de ajuste de ancho de columnas...")
-    
+
 #     # ⚠️ Requisito:
 #     # pip install openpyxl
-    
+
 #     establecer_ancho_columnas_excel(
 #         archivo_ruta=ARCHIVO_MAESTRO,
 #         hoja_nombre=HOJA_A_MODIFICAR,
 #         columnas_ancho=ANCHO_COLUMNAS
 #     )
+
+
+# def crear_archivo_vacio(ruta_nombre_archivo):
+#     """
+#     Crea un archivo vacío con la extensión especificada.
+
+#     Ejemplos:
+#         crear_archivo_vacio("documento.doc")
+#         crear_archivo_vacio("documento.docx")
+#         crear_archivo_vacio("reporte.xls")
+#         crear_archivo_vacio("reporte.xlsx")
+#     """
+#     esCreado = False
+
+#     try:
+#         with open(ruta_nombre_archivo, "w") as f:
+#             pass
+#         print(f"Archivo '{ruta_nombre_archivo}' creado con éxito.")
+#         esCreado = True
+#     except FileNotFoundError:
+#         print(f"❌ Error: Archivo no encontrado en la ruta: {ruta_nombre_archivo}")
+#     except Exception as e:
+#         print(f"❌ Ocurrió un error inesperado: {e}")
+
+#     return esCreado
+
+
+import os
+import zipfile
+import openpyxl
+
+
+def ocultar_hojas_excel(
+    archivo_ruta: str, hojas_a_ocultar: list[str], modo_oculto: str = "hidden"
+):
+    """
+    Oculta una o varias hojas de un archivo Excel existente.
+
+    Args:
+        archivo_ruta (str):
+            Ruta completa al archivo Excel.
+
+        hojas_a_ocultar (list[str]):
+            Lista con los nombres exactos de las hojas que se desean ocultar.
+
+        modo_oculto (str):
+            'hidden'      -> Ocultación normal.
+            'very_hidden' -> Ocultación avanzada.
+
+    Returns:
+        bool:
+            True si la operación fue exitosa.
+            False si ocurrió algún error.
+    """
+
+    MODOS = {"hidden": "hidden", "very_hidden": "veryHidden"}
+
+    # ---------------------------------------------------------
+    # 1. Validar modo
+    # ---------------------------------------------------------
+
+    modo = modo_oculto.lower()
+
+    if modo not in MODOS:
+        print(f"⚠️ Modo '{modo_oculto}' no reconocido. " "Se utilizará 'hidden'.")
+        modo = "hidden"
+
+    # ---------------------------------------------------------
+    # 2. Validar archivo
+    # ---------------------------------------------------------
+
+    if not os.path.exists(archivo_ruta):
+        print(f"❌ El archivo no existe: {archivo_ruta}")
+        return False
+
+    if os.path.getsize(archivo_ruta) == 0:
+        print(f"❌ El archivo está vacío: {archivo_ruta}")
+        return False
+
+    extension = os.path.splitext(archivo_ruta)[1].lower()
+
+    if extension not in [".xlsx", ".xlsm"]:
+        print(
+            f"❌ Formato no compatible: '{extension}'. "
+            "openpyxl requiere un archivo .xlsx o .xlsm."
+        )
+        return False
+
+    # ---------------------------------------------------------
+    # 3. Validar que realmente sea un archivo ZIP/Excel
+    # ---------------------------------------------------------
+
+    if not zipfile.is_zipfile(archivo_ruta):
+        print(
+            "❌ El archivo no es un Excel válido (.xlsx/.xlsm). "
+            "El archivo no tiene una estructura ZIP válida."
+        )
+        return False
+
+    try:
+
+        # -----------------------------------------------------
+        # 4. Cargar workbook UNA SOLA VEZ
+        # -----------------------------------------------------
+
+        print(f"⚙️ Cargando archivo: {archivo_ruta}")
+
+        opciones = {}
+
+        if extension == ".xlsm":
+            opciones["keep_vba"] = True
+
+        libro = openpyxl.load_workbook(archivo_ruta, **opciones)
+
+        # -----------------------------------------------------
+        # 5. Validar hojas
+        # -----------------------------------------------------
+
+        for nombre_hoja in hojas_a_ocultar:
+
+            if nombre_hoja not in libro.sheetnames:
+                print(f"⚠️ La hoja '{nombre_hoja}' " "no existe en el archivo.")
+                continue
+
+            hoja = libro[nombre_hoja]
+
+            # -------------------------------------------------
+            # 6. Evitar ocultar todas las hojas
+            # -------------------------------------------------
+
+            hojas_visibles = [h for h in libro.worksheets if h.sheet_state == "visible"]
+
+            if hoja.sheet_state == "visible" and len(hojas_visibles) <= 1:
+                print(
+                    f"⚠️ No se puede ocultar '{nombre_hoja}' "
+                    "porque sería la última hoja visible."
+                )
+                continue
+
+            hoja.sheet_state = MODOS[modo]
+
+            print(f"✓ Hoja '{nombre_hoja}' configurada como " f"'{MODOS[modo]}'.")
+
+        # -----------------------------------------------------
+        # 7. Guardar UNA SOLA VEZ
+        # -----------------------------------------------------
+
+        libro.save(archivo_ruta)
+
+        print("\n" + "-" * 60)
+        print("🎉 Proceso completado correctamente.")
+        print(f"📁 Archivo: {os.path.abspath(archivo_ruta)}")
+        print("-" * 60)
+
+        return True
+
+    except zipfile.BadZipFile:
+        print(
+            "❌ El archivo no tiene una estructura Excel válida "
+            "(ZIP corrupto o formato incorrecto)."
+        )
+        return False
+
+    except PermissionError:
+        print(
+            "❌ No se pudo modificar el archivo. "
+            "Verifique que no esté abierto en Excel."
+        )
+        return False
+
+    except Exception as e:
+        print(f"❌ Ocurrió un error inesperado en ocultar_hojas_excel: {e}")
+        return False
+
+
+import os
+import openpyxl
+
+
+def establecer_ancho_columnas_en_excel(
+    archivo_ruta: str, hoja_nombre: str, columnas_ancho: dict
+):
+    """
+    Establece el ancho de columnas específicas de una hoja de Excel.
+
+    El archivo Excel existente es modificado directamente y las demás
+    hojas permanecen sin modificaciones intencionales.
+
+    Args:
+        archivo_ruta (str):
+            Ruta completa del archivo .xlsx existente.
+
+        hoja_nombre (str):
+            Nombre exacto de la hoja que se desea modificar.
+
+        columnas_ancho (dict):
+            Diccionario con:
+                clave   = nombre exacto del encabezado
+                valor   = ancho deseado de la columna.
+
+            Ejemplo:
+                {
+                    "Name": 26,
+                    "FirstName": 15,
+                    "LastName": 18
+                }
+
+    Raises:
+        FileNotFoundError:
+            Si el archivo no existe.
+
+        ValueError:
+            Si el archivo no es un Excel XLSX válido,
+            si la hoja no existe o si no se encontraron columnas.
+    """
+
+    if not os.path.isfile(archivo_ruta):
+        raise FileNotFoundError(f"No existe el archivo: {archivo_ruta}")
+
+    if not archivo_ruta.lower().endswith(".xlsx"):
+        raise ValueError(f"El archivo debe tener extensión .xlsx: {archivo_ruta}")
+
+    if not columnas_ancho:
+        raise ValueError("El diccionario 'columnas_ancho' está vacío.")
+
+    try:
+        print(f"⚙️ Cargando archivo: '{archivo_ruta}'...")
+
+        workbook = openpyxl.load_workbook(archivo_ruta)
+
+    except Exception as e:
+        raise ValueError(
+            f"No fue posible abrir '{archivo_ruta}' como un archivo "
+            f"Excel XLSX válido. Error original: {e}"
+        ) from e
+
+    # ---------------------------------------------------------
+    # Validar hoja
+    # ---------------------------------------------------------
+
+    if hoja_nombre not in workbook.sheetnames:
+        workbook.close()
+
+        raise ValueError(
+            f"La hoja '{hoja_nombre}' no existe. "
+            f"Hojas disponibles: {workbook.sheetnames}"
+        )
+
+    worksheet = workbook[hoja_nombre]
+
+    print(f"✅ Hoja '{hoja_nombre}' cargada.")
+
+    # ---------------------------------------------------------
+    # Obtener encabezados
+    # ---------------------------------------------------------
+
+    encabezados = {}
+
+    for celda in worksheet[1]:
+        if celda.value is not None:
+            encabezado = str(celda.value).strip()
+            encabezados[encabezado] = celda.column
+
+    # ---------------------------------------------------------
+    # Aplicar anchos
+    # ---------------------------------------------------------
+
+    columnas_modificadas = 0
+
+    print("⚙️ Estableciendo ancho de columnas...")
+
+    for nombre_columna, ancho in columnas_ancho.items():
+
+        if nombre_columna not in encabezados:
+
+            print(f"⚠️ Columna no encontrada: '{nombre_columna}'")
+
+            continue
+
+        # Validar ancho
+        if not isinstance(ancho, (int, float)):
+            print(f"⚠️ Ancho inválido para '{nombre_columna}': " f"{ancho}")
+            continue
+
+        if ancho <= 0:
+            print(f"⚠️ El ancho de '{nombre_columna}' debe ser mayor " f"que cero.")
+            continue
+
+        numero_columna = encabezados[nombre_columna]
+
+        letra_columna = openpyxl.utils.get_column_letter(numero_columna)
+
+        worksheet.column_dimensions[letra_columna].width = ancho
+
+        columnas_modificadas += 1
+
+        print(f"   → {nombre_columna} ({letra_columna}): " f"ancho = {ancho}")
+
+    # ---------------------------------------------------------
+    # Validar resultado
+    # ---------------------------------------------------------
+
+    if columnas_modificadas == 0:
+        workbook.close()
+
+        raise ValueError(
+            "No se encontró ninguna de las columnas especificadas "
+            f"en la hoja '{hoja_nombre}'."
+        )
+
+    # ---------------------------------------------------------
+    # Guardar
+    # ---------------------------------------------------------
+
+    try:
+
+        workbook.save(archivo_ruta)
+
+    finally:
+
+        workbook.close()
+
+    print("\n" + "-" * 60)
+    print("🎉 Operación completada correctamente.")
+    print(f"   Hoja modificada: {hoja_nombre}")
+    print(f"   Columnas modificadas: {columnas_modificadas}")
+    print(f"   Archivo: {os.path.abspath(archivo_ruta)}")
+    print("-" * 60)
