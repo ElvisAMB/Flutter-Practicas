@@ -1,0 +1,170 @@
+{% extends "base/base.html" %}
+
+{% block acciones %}
+  {% if perms.rat.change_actividadtratamiento and not solo_lectura %}
+    <a href="{% url 'rat:editar' actividad.uuid %}" class="btn btn-primary btn-sm">Editar</a>
+  {% endif %}
+  {% if perms.rat.delete_actividadtratamiento and not solo_lectura %}
+    <a href="{% url 'rat:baja' actividad.uuid %}" class="btn btn-outline-danger btn-sm">Dar de baja</a>
+  {% endif %}
+{% endblock %}
+
+{% block contenido %}
+<div class="row g-3">
+  <div class="col-lg-8">
+
+    {% if actividad.alertas %}
+      <div class="alert alert-warning">
+        <strong>Señales de alerta ({{ actividad.alertas|length }})</strong>
+        <ul class="mb-0 small mt-2">
+          {% for a in actividad.alertas %}<li>{{ a }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold">Identificación y responsabilidad</div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-sm-4">3.1 Código</dt><dd class="col-sm-8 font-monospace">{{ actividad.codigo }}</dd>
+          <dt class="col-sm-4">3.1 Actividad</dt><dd class="col-sm-8">{{ actividad.nombre }}</dd>
+          <dt class="col-sm-4">Finalidad</dt><dd class="col-sm-8">{{ actividad.finalidad }}</dd>
+          <dt class="col-sm-4">3.2 Área</dt><dd class="col-sm-8">{{ actividad.area }}</dd>
+          <dt class="col-sm-4">3.3 Responsable</dt><dd class="col-sm-8">{{ actividad.cargo_responsable }}</dd>
+          <dt class="col-sm-4">3.4 Corresponsables</dt>
+          <dd class="col-sm-8">{% for c in actividad.corresponsables.all %}{{ c }}{% if not forloop.last %}, {% endif %}{% empty %}N/A{% endfor %}</dd>
+          <dt class="col-sm-4">3.5 Encargados</dt>
+          <dd class="col-sm-8">
+            {% for e in actividad.encargados.all %}
+              {{ e }}
+              {% if e.contrato_conforme %}<span class="badge text-bg-success">contrato conforme</span>
+              {% else %}<span class="badge text-bg-danger">sin contrato conforme</span>{% endif %}<br>
+            {% empty %}N/A{% endfor %}
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold">Licitud y categorías</div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-sm-4">3.6 Base de licitud</dt>
+          <dd class="col-sm-8">{% for b in actividad.bases_licitud.all %}<span class="badge text-bg-primary">{{ b.articulo }} núm. {{ b.numeral }}</span> {{ b.nombre }}<br>{% endfor %}</dd>
+          <dt class="col-sm-4">Justificación</dt><dd class="col-sm-8">{{ actividad.justificacion_base_licitud|linebreaksbr }}</dd>
+          {% if actividad.test_ponderacion_codigo %}
+            <dt class="col-sm-4">Test de ponderación</dt><dd class="col-sm-8">{{ actividad.test_ponderacion_codigo }}</dd>
+          {% endif %}
+          <dt class="col-sm-4">3.7 Habilitante especial</dt>
+          <dd class="col-sm-8">{% for h in actividad.habilitantes_especiales.all %}{{ h }}<br>{% empty %}N/A{% endfor %}</dd>
+          <dt class="col-sm-4">3.8 Categorías de datos</dt>
+          <dd class="col-sm-8">{% for c in actividad.categorias_datos.all %}<span class="badge {% if c.es_especial %}text-bg-danger{% else %}text-bg-secondary{% endif %}">{{ c.nombre }}</span> {% endfor %}</dd>
+          <dt class="col-sm-4">3.9 ¿Datos especiales?</dt>
+          <dd class="col-sm-8">{{ actividad.get_datos_especiales_display }}
+            {% if actividad.tipos_dato_especial %}<span class="text-muted">— {{ actividad.tipos_dato_especial|join:", " }}</span>{% endif %}</dd>
+          <dt class="col-sm-4">3.10 Interesados</dt>
+          <dd class="col-sm-8">{% for t in actividad.categorias_titulares.all %}{{ t.nombre }}{% if not forloop.last %}; {% endif %}{% endfor %}</dd>
+          <dt class="col-sm-4">3.11 ¿Menores?</dt><dd class="col-sm-8">{{ actividad.get_menores_display }} {{ actividad.menores_detalle }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold">Destinatarios y transferencias</div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-sm-4">3.12 Internos</dt>
+          <dd class="col-sm-8">{% for d in actividad.destinatarios_internos.all %}{{ d.nombre }}{% if not forloop.last %}; {% endif %}{% empty %}N/A{% endfor %}</dd>
+          <dt class="col-sm-4">3.13 Externos</dt>
+          <dd class="col-sm-8">{% for d in actividad.destinatarios_externos.all %}{{ d }}{% if not forloop.last %}; {% endif %}{% empty %}N/A{% endfor %}</dd>
+          <dt class="col-sm-4">Fundamento</dt><dd class="col-sm-8">{{ actividad.fundamento_comunicacion|default:"—" }}</dd>
+          <dt class="col-sm-4">3.14 ¿Transf. internacional?</dt><dd class="col-sm-8">{{ actividad.get_transferencia_internacional_display }}</dd>
+          <dt class="col-sm-4">3.15 Países / garantías</dt>
+          <dd class="col-sm-8">
+            {% for p in actividad.paises_destino.all %}{{ p.nombre }}{% if p.nivel_adecuado %} <span class="badge text-bg-success">nivel adecuado</span>{% endif %}{% if not forloop.last %}; {% endif %}{% empty %}N/A{% endfor %}
+            <div>{% for m in actividad.mecanismos_transferencia.all %}<span class="badge text-bg-info">{{ m.nombre }}</span> {% endfor %}</div>
+            <div class="text-muted">{{ actividad.garantias_detalle }}</div>
+          </dd>
+          <dt class="col-sm-4">Registro Nacional</dt>
+          <dd class="col-sm-8">{% if actividad.reportada_registro_nacional %}Reportada el {{ actividad.fecha_reporte_registro_nacional }}{% else %}<span class="text-danger">No reportada</span>{% endif %}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold">Conservación, seguridad y EIPD</div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-sm-4">3.16 Plazo</dt><dd class="col-sm-8">{{ actividad.plazo_conservacion }}</dd>
+          <dt class="col-sm-4">3.17 Criterio</dt><dd class="col-sm-8">{{ actividad.criterio_conservacion|default:"—" }} {{ actividad.criterio_detalle }}</dd>
+          <dt class="col-sm-4">Destino final</dt><dd class="col-sm-8">{{ actividad.get_destino_final_display|default:"—" }}</dd>
+          <dt class="col-sm-4">3.18 Medidas</dt>
+          <dd class="col-sm-8">{% for m in actividad.medidas_seguridad.all %}<span class="badge text-bg-secondary">{{ m.nombre }}</span> {% endfor %}</dd>
+          <dt class="col-sm-4">3.19 ¿EIPD?</dt>
+          <dd class="col-sm-8">{{ actividad.get_eipd_requerida_display }} {{ actividad.eipd_codigo }} {{ actividad.eipd_fecha|default_if_none:"" }}</dd>
+          <dt class="col-sm-4">Decisión automatizada</dt>
+          <dd class="col-sm-8">{{ actividad.decision_automatizada|yesno:"Sí,No" }} · intervención humana: {{ actividad.intervencion_humana|yesno:"Sí,No" }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold">3.20 Estado</div>
+      <div class="card-body">
+        <p class="mb-1"><span class="badge text-bg-dark fs-6">{{ actividad.get_estado_display }}</span>
+          <span class="text-muted small">v{{ actividad.version }}</span></p>
+        <p class="small text-muted mb-3">
+          Última revisión: {{ actividad.fecha_ultima_revision|default:"nunca" }}<br>
+          Riesgo estimado: <strong>{{ actividad.nivel_riesgo }}</strong>
+        </p>
+        {% if perms.rat.validar_actividad and not solo_lectura %}
+        <form method="post" action="{% url 'rat:cambiar_estado' actividad.uuid %}">
+          {% csrf_token %}
+          {% include "base/_formulario.html" with form=form_estado %}
+          <button class="btn btn-sm btn-outline-primary w-100">Cambiar estado</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-header fw-semibold d-flex justify-content-between">
+        <span>Brechas</span>
+        <span class="badge text-bg-secondary">{{ actividad.brechas.count }}</span>
+      </div>
+      <ul class="list-group list-group-flush small">
+        {% for b in actividad.brechas.all %}
+          <li class="list-group-item">
+            <strong>{{ b.get_tipo_display }}</strong>
+            <span class="badge text-bg-{% if b.vencida %}danger{% else %}secondary{% endif %}">{{ b.get_estado_display }}</span>
+            <div class="text-muted">{{ b.accion }}</div>
+            <div class="text-muted">Compromiso: {{ b.fecha_compromiso|default:"sin fecha" }}</div>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">Sin brechas registradas.</li>
+        {% endfor %}
+      </ul>
+      {% if perms.rat.change_actividadtratamiento and not solo_lectura %}
+      <div class="card-footer">
+        <a href="{% url 'rat:crear_brecha' actividad.uuid %}" class="btn btn-sm btn-outline-warning w-100">Registrar brecha</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-header fw-semibold">Historial de estados</div>
+      <ul class="list-group list-group-flush small">
+        {% for h in actividad.historial_estados.all|slice:":10" %}
+          <li class="list-group-item">
+            {{ h.fecha|date:"d/m/Y H:i" }} · {{ h.get_estado_anterior_display }} &rarr;
+            <strong>{{ h.get_estado_nuevo_display }}</strong>
+            <div class="text-muted">{{ h.usuario.username|default:"sistema" }} {{ h.motivo }}</div>
+          </li>
+        {% empty %}<li class="list-group-item text-muted">Sin cambios registrados.</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

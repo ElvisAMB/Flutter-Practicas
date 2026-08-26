@@ -1,0 +1,70 @@
+{% extends "base/base.html" %}
+{% block acciones %}
+  <form method="post" action="{% url 'auditoria:verificar' %}" class="d-inline">
+    {% csrf_token %}<button class="btn btn-outline-success btn-sm">Verificar integridad</button>
+  </form>
+  <a href="{% url 'auditoria:exportar' %}" class="btn btn-outline-secondary btn-sm">Exportar</a>
+{% endblock %}
+{% block contenido %}
+<form method="get" class="card card-body shadow-sm mb-3">
+  <div class="row g-2 align-items-end">
+    <div class="col-6 col-lg-2"><label class="form-label small mb-1">Usuario</label>
+      <input name="usuario" value="{{ filtros.usuario }}" class="form-control form-control-sm"></div>
+    <div class="col-6 col-lg-2"><label class="form-label small mb-1">Acción</label>
+      <select name="accion" class="form-select form-select-sm">
+        <option value="">Todas</option>
+        {% for v,l in acciones %}<option value="{{ v }}" {% if filtros.accion == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select></div>
+    <div class="col-6 col-lg-2"><label class="form-label small mb-1">Entidad</label>
+      <input name="modelo" value="{{ filtros.modelo }}" class="form-control form-control-sm"></div>
+    <div class="col-6 col-lg-2"><label class="form-label small mb-1">IP</label>
+      <input name="ip" value="{{ filtros.ip }}" class="form-control form-control-sm"></div>
+    <div class="col-6 col-lg-1"><label class="form-label small mb-1">Desde</label>
+      <input type="date" name="desde" value="{{ filtros.desde }}" class="form-control form-control-sm"></div>
+    <div class="col-6 col-lg-1"><label class="form-label small mb-1">Hasta</label>
+      <input type="date" name="hasta" value="{{ filtros.hasta }}" class="form-control form-control-sm"></div>
+    <div class="col-6 col-lg-1 form-check ms-2">
+      <input class="form-check-input" type="checkbox" name="solo_fallidos" id="sf" {% if filtros.solo_fallidos %}checked{% endif %}>
+      <label class="form-check-label small" for="sf">Solo fallidos</label></div>
+    <div class="col-lg-1 d-grid"><button class="btn btn-sm btn-outline-primary">Filtrar</button></div>
+  </div>
+</form>
+
+<div class="card shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-sm table-hover mb-0 align-middle">
+      <thead class="table-light"><tr>
+        <th>#</th><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Entidad</th>
+        <th>Objeto</th><th>IP</th><th></th>
+      </tr></thead>
+      <tbody>
+      {% for e in eventos %}
+        <tr class="{% if not e.exitoso %}table-danger{% endif %}">
+          <td class="text-muted small">{{ e.id }}</td>
+          <td class="small">{{ e.fecha|date:"d/m/Y H:i:s" }}</td>
+          <td class="small">{{ e.username }}<div class="text-muted">{{ e.perfil }}</div></td>
+          <td><span class="badge text-bg-secondary">{{ e.get_accion_display }}</span></td>
+          <td class="small">{{ e.modelo }}</td>
+          <td class="small">{{ e.objeto_repr|truncatechars:60 }}</td>
+          <td class="small font-monospace">{{ e.ip|default:"—" }}</td>
+          <td>
+            {% if e.detalle %}
+            <button class="btn btn-sm btn-link p-0" data-bs-toggle="collapse" data-bs-target="#d{{ e.id }}">detalle</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% if e.detalle %}
+        <tr class="collapse" id="d{{ e.id }}"><td colspan="8">
+          <pre class="small bg-body-tertiary p-2 mb-0" style="white-space:pre-wrap">{{ e.detalle }}</pre>
+          <div class="text-muted small font-monospace">hash: {{ e.hash_actual }}</div>
+        </td></tr>
+        {% endif %}
+      {% empty %}
+        <tr><td colspan="8" class="text-center text-muted py-4">Sin eventos para los filtros indicados.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include "base/_paginacion.html" %}
+{% endblock %}

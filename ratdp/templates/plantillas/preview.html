@@ -1,0 +1,7 @@
+{% extends "base/base.html" %}
+{% block contenido %}
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="card shadow-sm"><div class="card-body">
+  <div class="border rounded p-3 bg-white">{{ render|linebreaksbr }}</div>
+</div></div>
+{% endblock %}

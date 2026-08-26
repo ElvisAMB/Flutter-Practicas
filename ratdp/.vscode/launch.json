@@ -1,0 +1,98 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Servidor de desarrollo con depurador. Los puntos de interrupción
+      // funcionan en vistas, modelos, señales y formularios.
+      "name": "Django: runserver",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["runserver", "127.0.0.1:8000"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      // --noreload evita que el recargador automático reinicie el proceso y
+      // pierda los puntos de interrupción. Úselo cuando depure señales o el
+      // arranque de la aplicación.
+      "name": "Django: runserver (sin recarga)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["runserver", "--noreload", "127.0.0.1:8000"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      "name": "Django: pruebas (todas)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["test", "apps", "-v", "2"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      // Ejecuta solo la prueba abierta en el editor. Útil para iterar sobre
+      // un caso concreto sin esperar las 36.
+      "name": "Django: pruebas (archivo actual)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["test", "${relativeFileDirname}", "-v", "2"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      "name": "Django: shell",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["shell"],
+      "django": true,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      // Permite depurar cualquier comando de gestión escribiéndolo al lanzar
+      // (rotar_llaves, verificar_bitacora, inicializar, purgar_bitacora...).
+      "name": "Django: comando de gestión…",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["${input:comando}"],
+      "django": true,
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.dev" }
+    },
+    {
+      // Simula el arranque de producción (Waitress en loopback). Sirve para
+      // reproducir problemas que solo aparecen con DEBUG=False.
+      "name": "Waitress: simular producción",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/deploy/servidor.py",
+      "justMyCode": false,
+      "console": "integratedTerminal",
+      "env": { "DJANGO_SETTINGS_MODULE": "config.settings.prod" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "comando",
+      "type": "promptString",
+      "description": "Comando de manage.py (p. ej. verificar_bitacora)",
+      "default": "verificar_bitacora"
+    }
+  ]
+}

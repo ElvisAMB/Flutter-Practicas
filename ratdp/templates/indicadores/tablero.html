@@ -1,0 +1,90 @@
+{% extends "base/base.html" %}
+{% block acciones %}
+  <a href="?refrescar=1" class="btn btn-outline-secondary btn-sm">Refrescar</a>
+  <a href="{% url 'indicadores:exportar' %}" class="btn btn-outline-primary btn-sm">Exportar</a>
+{% endblock %}
+
+{% block contenido %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-lg-3">
+    <div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Actividades registradas</div>
+      <div class="display-6">{{ tablero.total_actividades }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Riesgo alto</div>
+      <div class="display-6 text-danger">{{ tablero.por_riesgo.ALTO }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Brechas abiertas</div>
+      <div class="display-6 text-warning">{{ tablero.brechas_abiertas }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card shadow-sm h-100"><div class="card-body">
+      <div class="text-muted small">Brechas vencidas</div>
+      <div class="display-6 text-danger">{{ tablero.brechas_vencidas }}</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="card shadow-sm mb-3">
+  <div class="card-header fw-semibold">Indicadores de gestión (Art. 36 RLOPDP — prueba de medidas)</div>
+  <div class="table-responsive">
+    <table class="table table-sm mb-0 align-middle">
+      <thead class="table-light"><tr>
+        <th>Código</th><th>Indicador</th><th class="text-end">Valor</th>
+        <th class="text-end">Meta</th><th>Detalle</th>
+      </tr></thead>
+      <tbody>
+      {% for i in tablero.indicadores %}
+        <tr>
+          <td class="font-monospace small">{{ i.codigo }}</td>
+          <td>{{ i.nombre }}</td>
+          <td class="text-end fw-semibold text-{% if i.semaforo == 'verde' %}success{% elif i.semaforo == 'amarillo' %}warning{% elif i.semaforo == 'rojo' %}danger{% else %}body{% endif %}">
+            {{ i.valor }}{% if i.unidad == "%" %}%{% else %} {{ i.unidad }}{% endif %}
+          </td>
+          <td class="text-end text-muted small">{% if i.meta %}{{ i.meta }}%{% else %}&mdash;{% endif %}</td>
+          <td class="small text-muted">{{ i.detalle }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold">Distribución por área</div>
+      <table class="table table-sm mb-0">
+        <thead class="table-light"><tr><th>Área</th><th class="text-end">Actividades</th><th class="text-end">Con datos especiales</th></tr></thead>
+        <tbody>
+        {% for a in tablero.por_area %}
+          <tr><td class="small">{{ a.area__nombre }}</td>
+              <td class="text-end">{{ a.n }}</td>
+              <td class="text-end">{{ a.especiales }}</td></tr>
+        {% empty %}<tr><td colspan="3" class="text-muted text-center py-3">Sin datos.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header fw-semibold">Brechas próximas</div>
+      <ul class="list-group list-group-flush small">
+      {% for b in brechas %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span><a href="{{ b.actividad.get_absolute_url }}">{{ b.actividad.codigo }}</a> · {{ b.get_tipo_display }}</span>
+          <span class="{% if b.vencida %}text-danger fw-semibold{% else %}text-muted{% endif %}">{{ b.fecha_compromiso|default:"sin fecha" }}</span>
+        </li>
+      {% empty %}<li class="list-group-item text-muted">Sin brechas abiertas.</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

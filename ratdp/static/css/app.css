@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Sistema RAT — estilos propios
+   --------------------------------------------------------------------------
+   Complementa a Bootstrap 5.3 (static/css/vendor/bootstrap.min.css).
+   Si Bootstrap no está presente, este archivo aporta un mínimo funcional
+   para que la aplicación siga siendo utilizable (útil en instalaciones
+   aisladas de internet antes de descargar el paquete).
+   ========================================================================== */
+
+:root {
+  --rat-primary: #14532d;
+  --rat-primary-soft: #dcfce7;
+  --rat-danger: #b91c1c;
+  --rat-warn: #b45309;
+  --rat-border: #dee2e6;
+  --rat-muted: #6c757d;
+}
+
+/* ---------------------------------------------------- identidad visual --- */
+.navbar.bg-dark { background-color: #0f172a !important; }
+.navbar-brand { letter-spacing: .02em; }
+
+.card { border: 1px solid var(--rat-border); border-radius: .5rem; }
+.card-header { background: #f8f9fa; font-size: .9rem; }
+
+.table thead th {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--rat-muted);
+}
+
+/* Los códigos RAT deben leerse como identificadores, no como prosa. */
+.font-monospace { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+/* --------------------------------------- semáforo de indicadores/riesgo --- */
+.semaforo-verde    { color: #15803d; }
+.semaforo-amarillo { color: var(--rat-warn); }
+.semaforo-rojo     { color: var(--rat-danger); }
+
+/* Fila del RAT con alertas abiertas: señal visual persistente. */
+tr.con-alertas { box-shadow: inset 3px 0 0 var(--rat-warn); }
+
+/* ------------------------------------------------ formularios extensos --- */
+/* El formulario de actividad tiene ~40 campos: los checkbox múltiples se
+   confinan en cajas con scroll para que la página siga siendo navegable. */
+ul#id_categorias_datos,
+ul#id_categorias_titulares,
+ul#id_medidas_seguridad,
+ul#id_tipos_dato_especial,
+#id_permisos {
+  list-style: none;
+  padding: .5rem .75rem;
+  margin: 0;
+  max-height: 14rem;
+  overflow-y: auto;
+  border: 1px solid var(--rat-border);
+  border-radius: .375rem;
+  background: #fff;
+  columns: 2;
+}
+#id_permisos { columns: 3; max-height: none; }
+#id_permisos label, ul[id^="id_"] label { font-size: .85rem; font-weight: 400; }
+
+.form-text { color: var(--rat-muted); }
+
+/* Ayuda contextual con la referencia normativa del campo. */
+.form-text::first-line { font-style: normal; }
+
+/* -------------------------------------------------------- bitácora ------- */
+.tabla-bitacora td { vertical-align: top; font-size: .82rem; }
+.tabla-bitacora pre { max-height: 18rem; overflow: auto; }
+
+/* --------------------------------------------------------- impresión ----- */
+@media print {
+  .navbar, footer, .btn, form.card-body { display: none !important; }
+  .card { break-inside: avoid; border-color: #999; }
+  a[href]::after { content: ""; }
+}
+
+/* ================= Mínimo funcional sin Bootstrap ======================== */
+@supports not (--bs-check: 1) {
+  body { font-family: system-ui, "Segoe UI", Roboto, sans-serif; margin: 0; background: #f5f6f8; }
+  .container-fluid { padding: 1rem 1.5rem; }
+  .card { background: #fff; margin-bottom: 1rem; padding: 0; }
+  .card-body, .card-header, .card-footer { padding: .75rem 1rem; }
+  .table { width: 100%; border-collapse: collapse; }
+  .table th, .table td { padding: .4rem .6rem; border-bottom: 1px solid var(--rat-border); text-align: left; }
+  .btn { display: inline-block; padding: .35rem .75rem; border: 1px solid var(--rat-border);
+         border-radius: .25rem; background: #fff; cursor: pointer; text-decoration: none; color: #212529; }
+  .btn-primary { background: var(--rat-primary); border-color: var(--rat-primary); color: #fff; }
+  .form-control, .form-select { width: 100%; padding: .35rem .5rem; border: 1px solid var(--rat-border);
+                                border-radius: .25rem; }
+  .badge { display: inline-block; padding: .15rem .4rem; border-radius: .25rem;
+           background: #e9ecef; font-size: .75rem; }
+  .alert { padding: .75rem 1rem; border: 1px solid var(--rat-border); border-radius: .375rem;
+           background: #fff; margin-bottom: 1rem; }
+  .text-muted { color: var(--rat-muted); }
+  .small { font-size: .85rem; }
+  nav.navbar { background: #0f172a; color: #fff; padding: .6rem 1.5rem; }
+  nav.navbar a { color: #e2e8f0; text-decoration: none; margin-right: 1rem; }
+}

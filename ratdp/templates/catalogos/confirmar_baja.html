@@ -1,0 +1,18 @@
+{% extends "base/base.html" %}
+{% block contenido %}
+<div class="card shadow-sm border-warning">
+  <div class="card-body">
+    <p>¿Confirma dar de baja <strong>{{ object }}</strong>?</p>
+    <p class="text-muted small">
+      El registro no se elimina físicamente: se marca como eliminado y se conserva
+      para trazabilidad, conforme al principio de responsabilidad proactiva
+      (Art. 10 lit. k LOPDP). Un administrador puede restaurarlo.
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn btn-warning">Dar de baja</button>
+      <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

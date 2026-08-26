@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% block acciones %}
+  {% if perms.plantillas.add_plantilla and not solo_lectura %}
+    <a href="{% url 'plantillas:crear' %}" class="btn btn-primary btn-sm">Nueva plantilla</a>
+  {% endif %}
+{% endblock %}
+{% block contenido %}
+<div class="card shadow-sm">
+  <table class="table table-sm table-hover mb-0 align-middle">
+    <thead class="table-light"><tr>
+      <th>Código</th><th>Nombre</th><th>Tipo</th><th>Versión</th><th>Estado</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for p in plantillas %}
+      <tr>
+        <td class="font-monospace small">{{ p.codigo }}</td>
+        <td>{{ p.nombre }}<div class="text-muted small">{{ p.descripcion|truncatechars:90 }}</div></td>
+        <td class="small">{{ p.get_tipo_display }}</td>
+        <td class="small">{{ p.version }}</td>
+        <td>{% if p.es_sistema %}<span class="badge text-bg-dark">Base</span>{% endif %}
+            {% if p.activa %}<span class="badge text-bg-success">Activa</span>{% else %}<span class="badge text-bg-secondary">Inactiva</span>{% endif %}</td>
+        <td class="text-end">
+          <a href="{% url 'plantillas:preview' p.uuid %}" class="btn btn-sm btn-outline-secondary">Vista previa</a>
+          {% if not solo_lectura %}
+          <a href="{% url 'plantillas:editar' p.uuid %}" class="btn btn-sm btn-outline-primary">Editar</a>
+          <form method="post" action="{% url 'plantillas:clonar' p.uuid %}" class="d-inline">
+            {% csrf_token %}<button class="btn btn-sm btn-outline-success">Clonar</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}<tr><td colspan="6" class="text-muted text-center py-4">Sin plantillas.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

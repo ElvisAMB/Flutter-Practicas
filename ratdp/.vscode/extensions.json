@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    "batisteo.vscode-django",
+    "monosans.djlint",
+    "mtxr.sqltools",
+    "eamodio.gitlens"
+  ],
+  "unwantedRecommendations": []
+}

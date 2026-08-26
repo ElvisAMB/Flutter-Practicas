@@ -1,0 +1,19 @@
+# Núcleo
+Django>=5.2,<5.3
+argon2-cffi>=23.1          # hashing de contraseñas resistente a GPU
+cryptography>=42.0         # AES-256-GCM para el cifrado de campos
+whitenoise[brotli]>=6.6    # servido de estáticos sin depender del servidor web
+
+# Servidor de aplicación (elegir según plataforma)
+waitress>=3.0              # Windows / Windows Server  -> recomendado
+# gunicorn>=22.0           # Linux
+
+# Controladores de base de datos (instalar solo el necesario)
+# psycopg[binary]>=3.1     # PostgreSQL
+# mysqlclient>=2.2         # MySQL / MariaDB
+# mssql-django>=1.5        # SQL Server  (requiere ODBC Driver 18)
+# oracledb>=2.0            # Oracle
+
+# Opcionales
+# django-redis>=5.4        # caché compartida en despliegues con varias instancias
+# django-axes>=6.4         # control adicional de fuerza bruta
