@@ -1,0 +1,19 @@
+{% extends "layout/base.html" %}
+{% block titulo %}Eliminar {{ object.codigo }}{% endblock %}
+{% block contenido %}
+<div class="card card-seccion mx-auto" style="max-width:40rem">
+  <div class="card-header text-danger">Eliminar actividad</div>
+  <div class="card-body">
+    <p>Va a eliminar <strong>{{ object.codigo }} — {{ object.nombre_corto }}</strong> y todo su historial.</p>
+    <div class="alert alert-warning small">
+      Para un RAT auditable, lo correcto casi siempre es cesar el registro (estado Histórico/Cesado
+      con fecha de cese), no borrarlo. Borrar destruye la evidencia de qué se trató y cuándo.
+    </div>
+    <form method="post" class="d-flex gap-2 justify-content-end">
+      {% csrf_token %}
+      <a class="btn btn-outline-secondary" href="{{ object.get_absolute_url }}">Cancelar</a>
+      <button class="btn btn-danger" type="submit">Eliminar de todos modos</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

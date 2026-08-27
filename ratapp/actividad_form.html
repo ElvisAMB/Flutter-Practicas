@@ -1,0 +1,275 @@
+{% extends "layout/base.html" %}
+{% block titulo %}{% if object %}Editar {{ object.codigo }}{% else %}Nueva actividad{% endif %}{% endblock %}
+
+{% block encabezado %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h4 mb-0">{% if object %}Editar actividad {{ object.codigo }}{% else %}Nueva actividad de tratamiento{% endif %}</h1>
+    <p class="text-secondary small mb-0">Una fila por finalidad. Los campos con * son obligatorios.</p>
+  </div>
+  <a class="btn btn-outline-secondary" href="{% url 'rat:actividad_list' %}">Cancelar</a>
+</div>
+{% endblock %}
+
+{% block contenido %}
+{% if form.non_field_errors %}
+  <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-lg-8">
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.1</span>Identificación de la actividad</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">{% with campo=form.codigo %}{% include "partials/campo.html" %}{% endwith %}</div>
+            <div class="col-md-8">{% with campo=form.nombre_corto %}{% include "partials/campo.html" %}{% endwith %}</div>
+          </div>
+          {% with campo=form.finalidad %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.2 – 3.5</span>Responsabilidad y terceros</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">{% with campo=form.area %}{% include "partials/campo.html" %}{% endwith %}</div>
+            <div class="col-md-6">{% with campo=form.responsable_cargo %}{% include "partials/campo.html" %}{% endwith %}</div>
+          </div>
+          <hr class="text-secondary">
+          <div class="row">
+            <div class="col-md-4">{% with campo=form.corresponsable_situacion %}{% include "partials/campo.html" %}{% endwith %}</div>
+            <div class="col-md-8">{% with campo=form.corresponsables %}{% include "partials/campo.html" %}{% endwith %}</div>
+          </div>
+          {% with campo=form.corresponsable_detalle %}{% include "partials/campo.html" %}{% endwith %}
+          <hr class="text-secondary">
+          {% with campo=form.encargados %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.6</span>Bases de licitud (Art. 7 LOPDP)</div>
+        <div class="card-body">
+          <p class="text-secondary small">Seleccione al menos una y justifique en una línea por qué cubre esta finalidad.</p>
+          {{ fs_bases.management_form }}
+          {% if fs_bases.non_form_errors %}<div class="alert alert-danger py-2">{{ fs_bases.non_form_errors }}</div>{% endif %}
+          <div id="bloque-bases">
+            {% for f in fs_bases %}
+              <div class="fila-inline p-3 mb-2 rounded">
+                {{ f.id }}
+                <div class="row g-2">
+                  <div class="col-md-5">{% with campo=f.base %}{% include "partials/campo.html" %}{% endwith %}</div>
+                  <div class="col-md-7">{% with campo=f.justificacion %}{% include "partials/campo.html" %}{% endwith %}</div>
+                  <div class="col-12">{% with campo=f.test_ponderacion %}{% include "partials/campo.html" %}{% endwith %}</div>
+                </div>
+                {% if f.DELETE %}<div class="form-check">{{ f.DELETE }}<label class="form-check-label small text-danger">Quitar</label></div>{% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-agregar="bases">
+            <i class="bi bi-plus-lg"></i> Agregar base de licitud
+          </button>
+          <div class="mt-3">{% with campo=form.aplica_art28 %}{% include "partials/campo.html" %}{% endwith %}</div>
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.8 – 3.9</span>Categorías de datos</div>
+        <div class="card-body">
+          {% with campo=form.categorias_datos %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.datos_especiales %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3" id="bloque-especiales">
+        <div class="card-header"><span class="numeral">3.7</span>Habilitante para categorías especiales (Art. 26 LOPDP)</div>
+        <div class="card-body">
+          <p class="text-secondary small">Se llena solo si 3.9 = Sí.</p>
+          {% with campo=form.habilitantes_especiales %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.habilitante_justificacion %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.10 – 3.11</span>Titulares</div>
+        <div class="card-body">
+          {% with campo=form.categorias_interesados %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.menores %}{% include "partials/campo.html" %}{% endwith %}
+          <div id="bloque-menores" class="border rounded p-3 bg-light">
+            <p class="small text-secondary mb-2">Verificaciones exigidas cuando hay datos de menores:</p>
+            {% with campo=form.menores_consentimiento_representante %}{% include "partials/campo.html" %}{% endwith %}
+            {% with campo=form.menores_interes_superior %}{% include "partials/campo.html" %}{% endwith %}
+            {% with campo=form.menores_informacion_representante %}{% include "partials/campo.html" %}{% endwith %}
+            {% with campo=form.menores_sin_decisiones_automatizadas %}{% include "partials/campo.html" %}{% endwith %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.12 – 3.13</span>Destinatarios</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-5">{% with campo=form.proceso_interno %}{% include "partials/campo.html" %}{% endwith %}</div>
+            <div class="col-md-7">{% with campo=form.destinatarios_internos %}{% include "partials/campo.html" %}{% endwith %}</div>
+          </div>
+          <hr class="text-secondary">
+          <p class="text-secondary small mb-2">
+            Destinatarios externos: terceros que reciben datos y deciden su propio uso.
+            Cada comunicación necesita su fundamento (Art. 33 / excepciones del Art. 36 LOPDP).
+            Si no hay ninguna, seleccione explícitamente la opción «Ninguno».
+          </p>
+          {{ fs_destinatarios.management_form }}
+          {% if fs_destinatarios.non_form_errors %}<div class="alert alert-danger py-2">{{ fs_destinatarios.non_form_errors }}</div>{% endif %}
+          <div id="bloque-dest">
+            {% for f in fs_destinatarios %}
+              <div class="fila-inline p-3 mb-2 rounded">
+                {{ f.id }}
+                <div class="row g-2">
+                  <div class="col-md-5">{% with campo=f.destinatario %}{% include "partials/campo.html" %}{% endwith %}</div>
+                  <div class="col-md-7">{% with campo=f.fundamento %}{% include "partials/campo.html" %}{% endwith %}</div>
+                </div>
+                {% if f.DELETE %}<div class="form-check">{{ f.DELETE }}<label class="form-check-label small text-danger">Quitar</label></div>{% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-primary" data-agregar="dest">
+            <i class="bi bi-plus-lg"></i> Agregar destinatario externo
+          </button>
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.14 – 3.15</span>Transferencias internacionales</div>
+        <div class="card-body">
+          {% with campo=form.transferencia_internacional %}{% include "partials/campo.html" %}{% endwith %}
+          <div class="alert alert-info py-2 small">
+            La nube extranjera es el caso más omitido. Pregunte siempre a TI la región de alojamiento
+            del proveedor antes de responder «No».
+          </div>
+          <div id="bloque-transf">
+            {{ fs_transferencias.management_form }}
+            {% if fs_transferencias.non_form_errors %}<div class="alert alert-danger py-2">{{ fs_transferencias.non_form_errors }}</div>{% endif %}
+            <div id="bloque-transf-filas">
+              {% for f in fs_transferencias %}
+                <div class="fila-inline p-3 mb-2 rounded">
+                  {{ f.id }}
+                  <div class="row g-2">
+                    <div class="col-md-4">{% with campo=f.pais %}{% include "partials/campo.html" %}{% endwith %}</div>
+                    <div class="col-md-8">{% with campo=f.mecanismo %}{% include "partials/campo.html" %}{% endwith %}</div>
+                    <div class="col-md-6">{% with campo=f.destinatario_exterior %}{% include "partials/campo.html" %}{% endwith %}</div>
+                    <div class="col-md-6">{% with campo=f.detalle %}{% include "partials/campo.html" %}{% endwith %}</div>
+                    <div class="col-md-6">{% with campo=f.registrada_registro_nacional %}{% include "partials/campo.html" %}{% endwith %}</div>
+                    <div class="col-md-6">{% with campo=f.fecha_registro %}{% include "partials/campo.html" %}{% endwith %}</div>
+                  </div>
+                  {% if f.DELETE %}<div class="form-check">{{ f.DELETE }}<label class="form-check-label small text-danger">Quitar</label></div>{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" data-agregar="transf">
+              <i class="bi bi-plus-lg"></i> Agregar país destino
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.16 – 3.17</span>Conservación</div>
+        <div class="card-body">
+          {% with campo=form.plazo_conservacion %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.criterio_plazo %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.destino_final %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.18</span>Medidas técnicas y organizativas</div>
+        <div class="card-body">
+          {% with campo=form.medidas_seguridad %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.medidas_adicionales %}{% include "partials/campo.html" %}{% endwith %}
+        </div>
+      </div>
+
+      <div class="card card-seccion mb-3">
+        <div class="card-header"><span class="numeral">3.19</span>Evaluación de impacto (EIPD)</div>
+        <div class="card-body">
+          {% with campo=form.eipd_requerida %}{% include "partials/campo.html" %}{% endwith %}
+          <div id="bloque-eipd">
+            {% with campo=form.criterios_eipd %}{% include "partials/campo.html" %}{% endwith %}
+            <div class="row">
+              <div class="col-md-6">{% with campo=form.eipd_codigo %}{% include "partials/campo.html" %}{% endwith %}</div>
+              <div class="col-md-6">{% with campo=form.eipd_fecha %}{% include "partials/campo.html" %}{% endwith %}</div>
+            </div>
+            {% with campo=form.consulta_spdp %}{% include "partials/campo.html" %}{% endwith %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card card-seccion mb-3 sticky-lg-top" style="top:5rem">
+        <div class="card-header"><span class="numeral">3.20</span>Estado del registro</div>
+        <div class="card-body">
+          {% with campo=form.estado %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.fecha_validacion %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.validado_por_cargo %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.reportado_registro_nacional %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.fecha_cese %}{% include "partials/campo.html" %}{% endwith %}
+          {% with campo=form.observaciones %}{% include "partials/campo.html" %}{% endwith %}
+          {% if object %}
+            <p class="small text-secondary">Versión actual: {{ object.version }} · guardar creará la {{ object.version|add:1 }}.</p>
+          {% endif %}
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-check-lg me-1"></i>Guardar actividad</button>
+            <a class="btn btn-outline-secondary" href="{% url 'rat:actividad_list' %}">Cancelar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Muestra u oculta bloques dependientes sin recargar la página.
+function alternar(origen, destino) {
+  const chk = document.getElementById(origen);
+  const bloque = document.getElementById(destino);
+  if (!chk || !bloque) return;
+  const aplicar = () => { bloque.style.display = chk.checked ? "" : "none"; };
+  chk.addEventListener("change", aplicar);
+  aplicar();
+}
+alternar("id_datos_especiales", "bloque-especiales");
+alternar("id_menores", "bloque-menores");
+alternar("id_eipd_requerida", "bloque-eipd");
+alternar("id_transferencia_internacional", "bloque-transf");
+
+// Clona la última fila de un formset y renumera los prefijos.
+document.querySelectorAll("[data-agregar]").forEach(function (boton) {
+  boton.addEventListener("click", function () {
+    const prefijo = boton.dataset.agregar;
+    const contenedor = document.getElementById(
+      prefijo === "transf" ? "bloque-transf-filas" : "bloque-" + prefijo);
+    const total = document.getElementById("id_" + prefijo + "-TOTAL_FORMS");
+    const indice = parseInt(total.value, 10);
+    const plantilla = contenedor.querySelector(".fila-inline");
+    const nueva = plantilla.cloneNode(true);
+    nueva.innerHTML = nueva.innerHTML.replace(
+      new RegExp(prefijo + "-(\\d+)-", "g"), prefijo + "-" + indice + "-");
+    nueva.querySelectorAll("input, select, textarea").forEach(function (campo) {
+      if (campo.type === "checkbox" || campo.type === "radio") campo.checked = false;
+      else if (campo.type !== "hidden") campo.value = "";
+      else if (campo.name.endsWith("-id")) campo.value = "";
+    });
+    nueva.querySelectorAll(".text-danger.small").forEach(e => e.remove());
+    contenedor.appendChild(nueva);
+    total.value = indice + 1;
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+{% block titulo %}Usuario{% endblock %}
+{% block contenido %}
+<div class="card card-seccion mx-auto" style="max-width:44rem">
+  <div class="card-header">{% if objeto %}Editar usuario {{ objeto.username }}{% else %}Nuevo usuario{% endif %}</div>
+  <div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      {% for campo in form %}{% include "partials/campo.html" %}{% endfor %}
+      <div class="d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-secondary" href="{% url 'cuentas:usuario_list' %}">Cancelar</a>
+        <button class="btn btn-primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

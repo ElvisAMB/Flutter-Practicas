@@ -1,0 +1,88 @@
+{% extends "layout/base.html" %}
+{% block titulo %}Tablero{% endblock %}
+
+{% block encabezado %}
+<h1 class="h4 mb-3">Tablero del RAT</h1>
+{% endblock %}
+
+{% block contenido %}
+<div class="row g-3 mb-3">
+  <div class="col-6 col-lg">
+    <div class="card card-seccion h-100"><div class="card-body">
+      <div class="display-6 fw-semibold">{{ total }}</div>
+      <div class="text-secondary small">Actividades registradas</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="card card-seccion h-100"><div class="card-body">
+      <div class="display-6 fw-semibold text-warning-emphasis">{{ con_especiales }}</div>
+      <div class="text-secondary small">Con datos especiales (3.9)</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="card card-seccion h-100"><div class="card-body">
+      <div class="display-6 fw-semibold">{{ con_menores }}</div>
+      <div class="text-secondary small">Con datos de menores (3.11)</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="card card-seccion h-100"><div class="card-body">
+      <div class="display-6 fw-semibold text-info-emphasis">{{ con_transferencia }}</div>
+      <div class="text-secondary small">Con transferencia internacional</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg">
+    <div class="card card-seccion h-100"><div class="card-body">
+      <div class="display-6 fw-semibold text-danger-emphasis">{{ con_eipd }}</div>
+      <div class="text-secondary small">Con EIPD requerida (3.19)</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card card-seccion mb-3">
+      <div class="card-header">Por estado</div>
+      <ul class="list-group list-group-flush">
+        {% for e in estados %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><span class="badge text-bg-{{ e.color }} me-2">&nbsp;</span>{{ e.nombre }}</span>
+          <span class="fw-semibold">{{ e.total }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card card-seccion">
+      <div class="card-header">Por área</div>
+      <ul class="list-group list-group-flush">
+        {% for a in areas %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ a.nombre }}</span><span class="fw-semibold">{{ a.total }}</span>
+        </li>
+        {% empty %}<li class="list-group-item text-secondary">Sin datos.</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="card card-seccion">
+      <div class="card-header">Registros con observaciones pendientes</div>
+      <div class="list-group list-group-flush">
+        {% for a in pendientes %}
+        <a class="list-group-item list-group-item-action" href="{{ a.get_absolute_url }}">
+          <div class="d-flex justify-content-between">
+            <span class="fw-semibold">{{ a.codigo }} — {{ a.nombre_corto }}</span>
+            <span class="badge text-bg-{{ a.estado.color }}">{{ a.estado.nombre }}</span>
+          </div>
+          <ul class="small text-secondary mb-0 mt-1">
+            {% for al in a.alertas %}<li>{{ al }}</li>{% endfor %}
+          </ul>
+        </a>
+        {% empty %}
+        <div class="list-group-item text-secondary">Ningún registro tiene observaciones abiertas.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

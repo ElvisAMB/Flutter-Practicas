@@ -1,0 +1,17 @@
+{% extends "layout/base.html" %}
+{% block titulo %}Eliminar{% endblock %}
+{% block contenido %}
+<div class="card card-seccion mx-auto" style="max-width:36rem">
+  <div class="card-header text-danger">Eliminar de {{ titulo }}</div>
+  <div class="card-body">
+    <p>Va a eliminar <strong>{{ objeto }}</strong>.</p>
+    <p class="small text-secondary">Si alguna actividad del RAT lo referencia, la eliminación se
+      bloqueará. En ese caso desactívelo para que deje de aparecer en el formulario sin romper el histórico.</p>
+    <form method="post" class="d-flex gap-2 justify-content-end">
+      {% csrf_token %}
+      <a class="btn btn-outline-secondary" href="{% url 'catalogos:lista' slug %}">Cancelar</a>
+      <button class="btn btn-danger" type="submit">Eliminar</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

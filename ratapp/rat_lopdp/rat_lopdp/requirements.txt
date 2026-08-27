@@ -1,0 +1,14 @@
+Django==5.0.9
+python-dotenv==1.0.1
+
+# --- Elija SOLO el driver del motor que va a usar ---
+# PostgreSQL
+psycopg[binary]==3.2.3
+# MySQL / MariaDB
+# mysqlclient==2.2.5
+# SQL Server (requiere ODBC Driver 17/18 instalado en el SO)
+# mssql-django==1.5
+# pyodbc==5.1.0
+
+# Opcional: servidor de producción
+# gunicorn==22.0.0

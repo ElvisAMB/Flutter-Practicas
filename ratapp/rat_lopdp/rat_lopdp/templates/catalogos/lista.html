@@ -1,0 +1,45 @@
+{% extends "layout/base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block encabezado %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h5 mb-0">{{ titulo }}</h1>
+    <a class="small text-decoration-none" href="{% url 'catalogos:indice' %}">&larr; Todos los catálogos</a>
+  </div>
+  {% if puede_crear %}
+  <a class="btn btn-primary" href="{% url 'catalogos:crear' slug %}"><i class="bi bi-plus-lg me-1"></i>Nuevo</a>
+  {% endif %}
+</div>
+{% endblock %}
+{% block contenido %}
+<div class="card card-seccion">
+  <div class="card-body pb-0">
+    <form method="get" class="row g-2 mb-3">
+      <div class="col-md-4"><input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Buscar"></div>
+      <div class="col-auto"><button class="btn btn-secondary">Buscar</button></div>
+    </form>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 tabla-rat">
+      <thead><tr>
+        {% for h in encabezados %}<th>{{ h }}</th>{% endfor %}
+        <th class="text-end">Acciones</th>
+      </tr></thead>
+      <tbody>
+      {% for fila in filas %}
+        <tr>
+          {% for v in fila.valores %}<td>{{ v }}</td>{% endfor %}
+          <td class="text-end text-nowrap">
+            {% if puede_editar %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'catalogos:editar' slug fila.obj.pk %}"><i class="bi bi-pencil"></i></a>{% endif %}
+            {% if puede_borrar %}<a class="btn btn-sm btn-outline-danger" href="{% url 'catalogos:eliminar' slug fila.obj.pk %}"><i class="bi bi-trash"></i></a>{% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9" class="text-center text-secondary py-4">Sin registros.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include "partials/paginacion.html" %}
+{% endblock %}

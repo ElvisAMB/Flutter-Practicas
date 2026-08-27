@@ -1,0 +1,257 @@
+{% extends "layout/base.html" %}
+{% block titulo %}{{ actividad.codigo }}{% endblock %}
+
+{% block encabezado %}
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+  <div>
+    <div class="d-flex align-items-center gap-2">
+      <h1 class="h4 mb-0">{{ actividad.codigo }}</h1>
+      <span class="badge text-bg-{{ actividad.estado.color }}">{{ actividad.estado.nombre }}</span>
+      <span class="badge text-bg-light border">v{{ actividad.version }}</span>
+    </div>
+    <p class="text-secondary mb-0">{{ actividad.nombre_corto }}</p>
+  </div>
+  <div class="d-flex gap-2 no-imprimir">
+    <button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i></button>
+    <a class="btn btn-outline-secondary" href="{% url 'rat:actividad_list' %}">Volver</a>
+    {% if perms.rat.change_actividadtratamiento %}
+      <a class="btn btn-primary" href="{% url 'rat:actividad_update' actividad.pk %}">
+        <i class="bi bi-pencil me-1"></i>Editar</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if actividad.alertas %}
+<div class="alert alert-warning">
+  <strong>Revisar antes de validar</strong>
+  <ul class="mb-0 mt-1">{% for a in actividad.alertas %}<li>{{ a }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block contenido %}
+<div class="row g-3">
+  <div class="col-lg-8">
+
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.1 – 3.5</span>Actividad y responsabilidad</div>
+      <div class="card-body">
+        <dl class="ficha row mb-0">
+          <div class="col-12"><dt>Finalidad</dt><dd>{{ actividad.finalidad }}</dd></div>
+          <div class="col-md-6"><dt>3.2 Área dueña</dt><dd>{{ actividad.area.nombre }}</dd></div>
+          <div class="col-md-6"><dt>3.3 Responsable (cargo)</dt><dd>{{ actividad.responsable_cargo }}</dd></div>
+          <div class="col-md-6">
+            <dt>3.4 Corresponsable</dt>
+            <dd>
+              {{ actividad.get_corresponsable_situacion_display }}
+              {% for t in actividad.corresponsables.all %}
+                <div class="small">· {{ t.razon_social }}</div>{% endfor %}
+              {% if actividad.corresponsable_detalle %}
+                <div class="small text-secondary mt-1">{{ actividad.corresponsable_detalle }}</div>{% endif %}
+            </dd>
+          </div>
+          <div class="col-md-6">
+            <dt>3.5 Encargados</dt>
+            <dd>
+              {% for t in actividad.encargados.all %}
+                <div>{{ t.razon_social }}
+                  {% if t.contrato_completo %}
+                    <span class="badge text-bg-success-subtle text-success-emphasis border border-success-subtle">contrato Art. 41 ok</span>
+                  {% else %}
+                    <span class="badge text-bg-warning">contrato incompleto</span>
+                  {% endif %}
+                </div>
+              {% empty %}N/A{% endfor %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.6</span>Bases de licitud</div>
+      <div class="card-body">
+        {% for b in actividad.baselicitudactividad_set.all %}
+          <div class="mb-3 pb-2 border-bottom">
+            <div class="fw-semibold"><span class="badge-numeral text-secondary">{{ b.base.codigo }}</span> {{ b.base.nombre }}</div>
+            <div class="small">{{ b.justificacion }}</div>
+            {% if b.test_ponderacion %}
+              <div class="small text-secondary mt-1"><em>Test de ponderación:</em> {{ b.test_ponderacion }}</div>
+            {% endif %}
+          </div>
+        {% empty %}<p class="text-danger mb-0">Sin bases de licitud registradas.</p>{% endfor %}
+        {% if actividad.aplica_art28 %}
+          <p class="small mb-0"><i class="bi bi-info-circle me-1"></i>Datos crediticios bajo el Art. 28 LOPDP:
+            licitud presunta con fines de solvencia patrimonial, restringida a esa única finalidad.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.7 – 3.11</span>Datos y titulares</div>
+      <div class="card-body">
+        <dl class="ficha row mb-0">
+          <div class="col-md-6">
+            <dt>3.8 Categorías de datos</dt>
+            <dd>{% for c in actividad.categorias_datos.all %}
+              <span class="badge {% if c.es_sensible %}text-bg-warning{% else %}text-bg-light border{% endif %} me-1 mb-1">{{ c.nombre }}</span>
+            {% endfor %}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt>3.10 Titulares</dt>
+            <dd>{% for c in actividad.categorias_interesados.all %}
+              <span class="badge text-bg-light border me-1 mb-1">{{ c.nombre }}</span>{% endfor %}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt>3.9 Datos especiales</dt>
+            <dd>{% if actividad.datos_especiales %}<span class="badge text-bg-warning">Sí</span>{% else %}No{% endif %}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt>3.11 Menores</dt>
+            <dd>{% if actividad.menores %}<span class="badge text-bg-warning">Sí</span>{% else %}No{% endif %}</dd>
+          </div>
+          {% if actividad.datos_especiales %}
+          <div class="col-12">
+            <dt>3.7 Habilitante Art. 26</dt>
+            <dd>
+              {% for h in actividad.habilitantes_especiales.all %}<div>{{ h.codigo }} — {{ h.nombre }}</div>{% endfor %}
+              {% if actividad.habilitante_justificacion %}
+                <div class="small text-secondary">{{ actividad.habilitante_justificacion }}</div>{% endif %}
+            </dd>
+          </div>
+          {% endif %}
+          {% if actividad.menores %}
+          <div class="col-12">
+            <dt>Verificaciones de menores</dt>
+            <dd class="small">
+              <div>{% if actividad.menores_consentimiento_representante %}<i class="bi bi-check-circle text-success"></i>{% else %}<i class="bi bi-x-circle text-danger"></i>{% endif %} Consentimiento del representante legal (Art. 19 RLOPDP)</div>
+              <div>{% if actividad.menores_interes_superior %}<i class="bi bi-check-circle text-success"></i>{% else %}<i class="bi bi-x-circle text-danger"></i>{% endif %} Interés superior del niño (Art. 20 RLOPDP)</div>
+              <div>{% if actividad.menores_informacion_representante %}<i class="bi bi-check-circle text-success"></i>{% else %}<i class="bi bi-x-circle text-danger"></i>{% endif %} Información dirigida al representante (Art. 12 LOPDP)</div>
+              <div>{% if actividad.menores_sin_decisiones_automatizadas %}<i class="bi bi-check-circle text-success"></i>{% else %}<i class="bi bi-x-circle text-danger"></i>{% endif %} Sin decisiones automatizadas (Art. 21 LOPDP)</div>
+            </dd>
+          </div>
+          {% endif %}
+        </dl>
+      </div>
+    </div>
+
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.12 – 3.15</span>Destinatarios y transferencias</div>
+      <div class="card-body">
+        <dl class="ficha row">
+          <div class="col-md-4"><dt>3.12 Proceso</dt><dd>{{ actividad.proceso_interno.nombre }}</dd></div>
+          <div class="col-md-8"><dt>3.12 Destinatarios internos</dt><dd>{{ actividad.destinatarios_internos }}</dd></div>
+        </dl>
+        <dt class="small text-uppercase text-secondary fw-semibold">3.13 Destinatarios externos</dt>
+        <table class="table table-sm mt-2">
+          <tbody>
+          {% for d in actividad.destinatarioexternoactividad_set.all %}
+            <tr><td class="fw-semibold" style="width:35%">{{ d.destinatario.nombre }}</td><td class="small">{{ d.fundamento }}</td></tr>
+          {% empty %}<tr><td class="text-danger">Sin registrar.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        <dt class="small text-uppercase text-secondary fw-semibold mt-3">
+          3.14 Transferencia internacional: {% if actividad.transferencia_internacional %}Sí{% else %}No{% endif %}
+        </dt>
+        {% if actividad.transferencia_internacional %}
+        <table class="table table-sm mt-2">
+          <thead><tr><th>País</th><th>Mecanismo</th><th>Detalle</th><th>Registro Nacional</th></tr></thead>
+          <tbody>
+          {% for t in actividad.transferencias.all %}
+            <tr>
+              <td>{{ t.pais.nombre }}{% if t.pais.nivel_adecuado %} <span class="badge text-bg-success-subtle text-success-emphasis border border-success-subtle">nivel adecuado</span>{% endif %}</td>
+              <td class="small">{{ t.mecanismo.codigo }} — {{ t.mecanismo.nombre }}</td>
+              <td class="small">{{ t.detalle|default:"—" }}{% if t.destinatario_exterior %}<div class="text-secondary">{{ t.destinatario_exterior }}</div>{% endif %}</td>
+              <td>{% if t.registrada_registro_nacional %}<i class="bi bi-check-circle text-success"></i> {{ t.fecha_registro|default:"" }}{% else %}<span class="badge text-bg-warning">pendiente</span>{% endif %}</td>
+            </tr>
+          {% empty %}<tr><td colspan="4" class="text-danger">Marcada como Sí pero sin país ni mecanismo.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.16 – 3.19</span>Conservación, seguridad y EIPD</div>
+      <div class="card-body">
+        <dl class="ficha row mb-0">
+          <div class="col-md-6"><dt>3.16 Plazo de conservación</dt><dd>{{ actividad.plazo_conservacion }}</dd></div>
+          <div class="col-md-6"><dt>3.17 Destino final</dt><dd>{{ actividad.get_destino_final_display }}</dd></div>
+          <div class="col-12"><dt>3.17 Criterio del plazo</dt><dd>{{ actividad.criterio_plazo }}</dd></div>
+          <div class="col-12">
+            <dt>3.18 Medidas técnicas y organizativas</dt>
+            <dd>
+              {% for m in actividad.medidas_seguridad.all %}
+                <span class="badge text-bg-light border me-1 mb-1">{{ m.nombre }}</span>{% endfor %}
+              {% if actividad.medidas_adicionales %}<div class="small mt-2">{{ actividad.medidas_adicionales }}</div>{% endif %}
+            </dd>
+          </div>
+          <div class="col-12">
+            <dt>3.19 EIPD</dt>
+            <dd>
+              {% if actividad.eipd_requerida %}
+                <span class="badge text-bg-danger">Requerida</span>
+                {{ actividad.eipd_codigo }} · {{ actividad.eipd_fecha|date:"d/m/Y" }}
+                <ul class="small mb-0 mt-1">
+                  {% for c in actividad.criterios_eipd.all %}<li>{{ c.nombre }}</li>{% endfor %}
+                </ul>
+              {% else %}No requerida{% endif %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card card-seccion mb-3">
+      <div class="card-header"><span class="numeral">3.20</span>Estado y trazabilidad</div>
+      <div class="card-body">
+        <dl class="ficha mb-3">
+          <dt>Estado</dt><dd><span class="badge text-bg-{{ actividad.estado.color }}">{{ actividad.estado.nombre }}</span></dd>
+          <dt>Versión</dt><dd>{{ actividad.version }}</dd>
+          <dt>Última actualización</dt><dd>{{ actividad.actualizado_en|date:"d/m/Y H:i" }}{% if actividad.actualizado_por %} · {{ actividad.actualizado_por }}{% endif %}</dd>
+          {% if actividad.fecha_validacion %}<dt>Validado</dt><dd>{{ actividad.fecha_validacion|date:"d/m/Y" }} · {{ actividad.validado_por_cargo }}</dd>{% endif %}
+          {% if actividad.fecha_cese %}<dt>Fecha de cese</dt><dd>{{ actividad.fecha_cese|date:"d/m/Y" }}</dd>{% endif %}
+          <dt>Registro Nacional</dt><dd>{% if actividad.reportado_registro_nacional %}Reportado{% else %}No reportado{% endif %}</dd>
+        </dl>
+
+        {% if perms.rat.validar_actividad %}
+        <form method="post" action="{% url 'rat:actividad_estado' actividad.pk %}" class="border-top pt-3 no-imprimir">
+          {% csrf_token %}
+          <label class="form-label small">Cambiar estado</label>
+          <select name="estado" class="form-select form-select-sm mb-2">
+            {% for e in estados %}
+              <option value="{{ e.pk }}" {% if e.pk == actividad.estado_id %}selected{% endif %}>{{ e.nombre }}</option>
+            {% endfor %}
+          </select>
+          <input type="text" name="nota" class="form-control form-control-sm mb-2" placeholder="Nota del cambio">
+          <button class="btn btn-sm btn-outline-primary w-100" type="submit">Aplicar</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card card-seccion">
+      <div class="card-header">Historial</div>
+      <ul class="list-group list-group-flush small">
+        {% for h in actividad.historial.all|slice:":12" %}
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <span class="fw-semibold">v{{ h.version }}</span>
+              <span class="text-secondary">{{ h.fecha|date:"d/m/Y H:i" }}</span>
+            </div>
+            <div class="text-secondary">
+              {{ h.nota }}{% if h.usuario %} · {{ h.usuario }}{% endif %}
+              {% if h.estado_anterior and h.estado_nuevo and h.estado_anterior != h.estado_nuevo %}
+                <div>{{ h.estado_anterior.nombre }} → {{ h.estado_nuevo.nombre }}</div>
+              {% endif %}
+            </div>
+          </li>
+        {% empty %}<li class="list-group-item text-secondary">Sin movimientos.</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

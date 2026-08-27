@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<div class="card card-seccion mx-auto" style="max-width:46rem">
+  <div class="card-header">{% if objeto %}Editar{% else %}Nuevo{% endif %} · {{ titulo }}</div>
+  <div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      {% for campo in form %}{% include "partials/campo.html" %}{% endfor %}
+      <div class="d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-secondary" href="{% url 'catalogos:lista' slug %}">Cancelar</a>
+        <button class="btn btn-primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
