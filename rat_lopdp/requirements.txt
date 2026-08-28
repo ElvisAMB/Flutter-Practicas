@@ -12,3 +12,9 @@ psycopg[binary]==3.2.3
 
 # Opcional: servidor de producción
 # gunicorn==22.0.0
+
+# Sólo para desarrollo
+# from django.conf import settings
+
+# if settings.DEBUG:
+#     urlpatterns += [path("__reload__/", include("django_browser_reload.urls"))]

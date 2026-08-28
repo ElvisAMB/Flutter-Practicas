@@ -171,3 +171,8 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = env_bool("COOKIE_SECURE", True)
     X_FRAME_OPTIONS = "DENY"
     SESSION_COOKIE_AGE = int(env("SESSION_COOKIE_AGE", "3600"))
+    
+# Validación para edición en tiempo de ejecución DEBUG=True
+if DEBUG:
+    INSTALLED_APPS += ["django_browser_reload"]
+    MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]

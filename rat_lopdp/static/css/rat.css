@@ -14,11 +14,34 @@ body { font-size: .94rem; }
 .tabla-rat th { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: #6c757d; }
 .tabla-rat td { vertical-align: middle; }
 
-.lista-chequeo { max-height: 15rem; overflow-y: auto; border: 1px solid var(--rat-borde);
-  border-radius: .375rem; padding: .5rem .75rem; background: #fff; }
-.lista-chequeo ul { list-style: none; margin: 0; padding: 0; }
-.lista-chequeo li { padding: .12rem 0; }
-.lista-chequeo label { margin-left: .35rem; }
+.lista-chequeo { 
+  /*min-height: 9rem;*/
+  /*max-height: 15rem; */
+  overflow-y: auto; 
+  border: 1px solid var(--rat-borde);
+  border-radius: .375rem; 
+  padding: .5rem .75rem; 
+  background: #fff; 
+}
+.lista-chequeo ul { 
+  list-style: none; 
+  margin: 0; 
+  padding: 0; 
+  columns: 2;                /* dos columnas en escritorio */
+  column-gap: 1.5rem;
+}
+.lista-chequeo li { 
+  padding: .18rem 0; 
+  break-inside: avoid;       /* evita que una opción se parta entre columnas */
+}
+.lista-chequeo label { 
+  margin-left: .35rem; 
+}
+@media (max-width: 767px) {
+  .lista-chequeo ul { columns: 1; }
+}
+
+
 
 .campo-ayuda { font-size: .8rem; }
 
