@@ -44,8 +44,10 @@
             <dt>3.4 Corresponsable</dt>
             <dd>
               {{ actividad.get_corresponsable_situacion_display }}
-              {% for t in actividad.corresponsables.all %}
-                <div class="small">· {{ t.razon_social }}</div>{% endfor %}
+              {% comment %} {% for t in actividad.corresponsables.all %} {% endcomment %}
+              {% if actividad.corresponsables %}
+                <div class="small">{{ actividad.corresponsables }}</div>{% endif %}
+              <div class="small">· {{ t.razon_social }}</div>
               {% if actividad.corresponsable_detalle %}
                 <div class="small text-secondary mt-1">{{ actividad.corresponsable_detalle }}</div>{% endif %}
             </dd>
@@ -53,15 +55,16 @@
           <div class="col-md-6">
             <dt>3.5 Encargados</dt>
             <dd>
-              {% for t in actividad.encargados.all %}
-                <div>{{ t.razon_social }}
-                  {% if t.contrato_completo %}
-                    <span class="badge text-bg-success-subtle text-success-emphasis border border-success-subtle">contrato Art. 41 ok</span>
-                  {% else %}
-                    <span class="badge text-bg-warning">contrato incompleto</span>
-                  {% endif %}
-                </div>
-              {% empty %}N/A{% endfor %}
+              <dd>
+              {{ actividad.encargados|default:"N/A"|linebreaksbr }}
+              {% if actividad.encargados %}
+                {% if actividad.encargados_contrato_art41 %}
+                  <div><span class="badge text-bg-success-subtle text-success-emphasis border border-success-subtle">contratos Art. 41 verificados</span></div>
+                {% else %}
+                  <div><span class="badge text-bg-warning">contratos sin verificar</span></div>
+                {% endif %}
+              {% endif %}
+            </dd>
             </dd>
           </div>
         </dl>

@@ -193,18 +193,23 @@ def exportar_csv(request):
     ])
     consulta = (ActividadTratamiento.objects
                 .select_related("area", "estado", "proceso_interno")
-                .prefetch_related("categorias_datos", "categorias_interesados", "encargados",
-                                  "corresponsables", "habilitantes_especiales",
-                                  "medidas_seguridad", "transferencias__pais",
+                .prefetch_related("categorias_datos", 
+                                   "categorias_interesados", 
+                                  #"encargados",
+                                  #"corresponsables", 
+                                  "habilitantes_especiales",
+                                  "medidas_seguridad", 
+                                  "transferencias__pais",
                                   "transferencias__mecanismo",
                                   "baselicitudactividad_set__base",
-                                  "destinatarioexternoactividad_set__destinatario"))
+                                  "destinatarioexternoactividad_set__destinatario"
+                                  )
+                )
     for a in consulta:
         escritor.writerow([
             a.codigo, a.nombre_corto, a.finalidad, a.area.nombre, a.responsable_cargo,
-            "; ".join(t.razon_social for t in a.corresponsables.all())
-            or a.get_corresponsable_situacion_display(),
-            "; ".join(t.razon_social for t in a.encargados.all()) or "N/A",
+            "; ".join(a.corresponsables or a.get_corresponsable_situacion_display()),
+            "; ".join(a.encargados or "N/A"),
             " | ".join(f"{b.base.codigo} {b.base.nombre}: {b.justificacion}"
                        for b in a.baselicitudactividad_set.all()),
             "; ".join(h.codigo for h in a.habilitantes_especiales.all()) or "N/A",

@@ -28,10 +28,14 @@ class ActividadAdmin(admin.ModelAdmin):
                    "transferencia_internacional", "eipd_requerida")
     search_fields = ("codigo", "nombre_corto", "finalidad")
     inlines = [BaseLicitudInline, DestinatarioInline, TransferenciaInline]
-    filter_horizontal = ("categorias_datos", "categorias_interesados",
-                         "habilitantes_especiales", "medidas_seguridad",
-                         "criterios_eipd", "encargados", "corresponsables")
-
+    filter_horizontal = (
+        "categorias_datos", 
+        "categorias_interesados",
+        "habilitantes_especiales", 
+        "medidas_seguridad",
+        "criterios_eipd", 
+        #"encargados"
+    )
 
 admin.site.register(HistorialActividad)
 admin.site.site_header = "Administración del RAT"

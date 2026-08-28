@@ -98,3 +98,9 @@ Esta herramienta ordena y documenta el RAT. No sustituye el criterio del DPD ni 
 asesoría legal: las referencias normativas incluidas en los catálogos son un punto de
 partida que debe validarse contra el texto vigente de la LOPDP, su reglamento y las
 resoluciones de la SPDP.
+
+
+### Versión de estilos locales
+
+- bootstrap-5.3.3-dist
+- bootstrap-icons-1.11.3

@@ -49,7 +49,9 @@ class ActividadTratamientoForm(MixinBootstrap, forms.ModelForm):
             "categorias_interesados": forms.CheckboxSelectMultiple(
                 attrs={"class": "lista-alta"}
             ),
-            "habilitantes_especiales": forms.CheckboxSelectMultiple,
+            "habilitantes_especiales": forms.CheckboxSelectMultiple(
+                attrs={"class": "lista-alta"}
+            ),
             "medidas_seguridad": forms.CheckboxSelectMultiple(
                 attrs={"class": "lista-alta"}
             ),
@@ -138,13 +140,12 @@ class ActividadTratamientoForm(MixinBootstrap, forms.ModelForm):
                 )
 
         # 3.4
-        if datos.get("corresponsable_situacion") == "SI" and not datos.get(
-            "corresponsables"
-        ):
-            errores["corresponsables"] = (
-                "Seleccione al menos un corresponsable o cambie 3.4."
-            )
+        # if datos.get("corresponsable_situacion") == "SI" and not datos.get("corresponsables"):
+        #     errores["corresponsables"] = ("Seleccione al menos un corresponsable o cambie 3.4.")
 
+        if datos.get("corresponsable_situacion") == "SI" and not (datos.get("corresponsables") or "").strip():
+            errores["corresponsables"] = "Indique la razón social del corresponsable o cambie 3.4."
+        
         if errores:
             raise forms.ValidationError(errores)
         return datos
