@@ -15,8 +15,8 @@ body { font-size: .94rem; }
 .tabla-rat td { vertical-align: middle; }
 
 .lista-chequeo { 
-  /*min-height: 9rem;*/
-  /*max-height: 15rem; */
+  min-height: 9rem;
+  max-height: 15rem;
   overflow-y: auto; 
   border: 1px solid var(--rat-borde);
   border-radius: .375rem; 
@@ -40,8 +40,6 @@ body { font-size: .94rem; }
 @media (max-width: 767px) {
   .lista-chequeo ul { columns: 1; }
 }
-
-
 
 .campo-ayuda { font-size: .8rem; }
 
