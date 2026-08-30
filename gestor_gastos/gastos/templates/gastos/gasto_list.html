@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-3">
+
+    <h1>Gastos</h1>
+
+    <a href="{% url 'gasto_crear' %}" class="btn btn-primary">
+        Nuevo gasto
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+                        <th>Código</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Previsto</th>
+                        <th>Real</th>
+                        <th>Diferencia</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for gasto in gastos %}
+
+                    <tr>
+
+                        <td>{{ gasto.codigo }}</td>
+
+                        <td>
+                            {{ gasto.tipo_gasto }}
+                        </td>
+
+                        <td>
+                            {{ gasto.descripcion }}
+                        </td>
+
+                        <td>
+                            $ {{ gasto.costo_previsto }}
+                        </td>
+
+                        <td>
+                            $ {{ gasto.costo_real }}
+                        </td>
+
+                        <td>
+                            $ {{ gasto.diferencia }}
+                        </td>
+
+                        <td>
+                            {{ gasto.fecha|date:"d/m/Y" }}
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'gasto_editar' gasto.codigo %}" class="btn btn-sm btn-warning">
+                                Editar
+                            </a>
+
+                            <a href="{% url 'gasto_eliminar' gasto.codigo %}" class="btn btn-sm btn-danger">
+                                Eliminar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="8">
+                            No existen gastos registrados.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

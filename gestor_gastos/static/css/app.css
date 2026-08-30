@@ -1,0 +1,16 @@
+body {
+    background-color: #f5f6f8;
+}
+
+.card-dashboard {
+    border: none;
+    border-radius: 12px;
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+.body {
+    font-family: 'Inter', sans-serif;
+}
