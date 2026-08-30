@@ -11,8 +11,11 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-
 from .forms import GastoForm
+from django.contrib.auth import login
+from django.shortcuts import redirect
+from django.views.generic import FormView
+from .forms import RegistroUsuarioForm
 
 # Create your views here.
 
@@ -80,3 +83,20 @@ class GastoDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
 
         return Gasto.objects.filter(usuario=self.request.user)
+
+
+class RegistroView(FormView):
+
+    template_name = "registration/registro.html"
+
+    form_class = RegistroUsuarioForm
+
+    success_url = reverse_lazy("dashboard")
+
+    def form_valid(self, form):
+
+        usuario = form.save()
+
+        login(self.request, usuario)
+
+        return super().form_valid(form)

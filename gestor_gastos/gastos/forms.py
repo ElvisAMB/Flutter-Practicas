@@ -1,5 +1,7 @@
 from django import forms
 from .models import Gasto
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class GastoForm(forms.ModelForm):
@@ -21,3 +23,17 @@ class GastoForm(forms.ModelForm):
             "fecha": forms.DateInput(attrs={"type": "date"}),
             "observacion": forms.Textarea(attrs={"rows": 3}),
         }
+
+
+class RegistroUsuarioForm(UserCreationForm):
+
+    class Meta:
+
+        model = User
+
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        ]
