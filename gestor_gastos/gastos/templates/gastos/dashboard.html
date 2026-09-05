@@ -9,45 +9,60 @@ Dashboard
 <h1 class="mb-4">
     Dashboard
 </h1>
-
 <div class="row">
-
     <div class="col-md-4">
-
         <div class="card card-dashboard shadow-sm">
-
             <div class="card-body">
-
                 <h6>Total gastado</h6>
-
                 <h2>
                     $ {{ total_gastos|floatformat:2 }}
                 </h2>
-
             </div>
-
         </div>
-
     </div>
-
     <div class="col-md-4">
-
         <div class="card card-dashboard shadow-sm">
-
             <div class="card-body">
-
                 <h6>Gastos registrados</h6>
-
                 <h2>
                     {{ cantidad_gastos }}
                 </h2>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+<canvas id="graficoAnual"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    const etiquetas = [
+        {% for item in por_anio %}        //         "{{ item.anio }}",
+        {% endfor %}
+    ];
+
+    const valores = [
+        {% for item in por_anio %}
+            {{ item.total|default:0 }},
+        {% endfor %}
+    ];
+
+    new Chart(
+        document.getElementById('graficoAnual'),
+        {
+            type: 'bar',
+            data: {
+                labels: etiquetas,
+                datasets: [
+                    {
+                        label: 'Gastos por año',
+                        data: valores
+                    }
+                ]
+            }
+        }
+    );
+
+</script>
 
 {% endblock %}

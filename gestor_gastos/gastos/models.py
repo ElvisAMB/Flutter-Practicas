@@ -22,6 +22,7 @@ class TipoGasto(models.Model):
 
 
 class Gasto(models.Model):
+
     codigo = models.BigAutoField(primary_key=True)
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="gastos"
