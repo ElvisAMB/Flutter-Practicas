@@ -24,9 +24,18 @@ from .forms import RegistroUsuarioForm
 @login_required
 def dashboard(request):
 
+    anio = request.GET.get("anio")
+    mes = request.GET.get("mes")
+
     gastos = Gasto.objects.filter(
         usuario=request.user
     )  # "Obtenga los gastos cuyo usuario sea el usuario autenticado."
+
+    if anio:
+        gastos = gastos.filter(fecha__year=anio)
+
+    if mes:
+        gastos = gastos.filter(fecha__month=mes)
 
     total = gastos.aggregate(total=Sum("costo_real"))["total"] or 0
 
@@ -40,21 +49,16 @@ def dashboard(request):
     )
 
     por_tipo = (
-        gastos
-        .values(
-            'tipo_gasto__nombre'
-        )
-        .annotate(
-            total=Sum('costo_real')
-        )
-        .order_by('-total')
+        gastos.values("tipo_gasto__nombre")
+        .annotate(total=Sum("costo_real"))
+        .order_by("-total")
     )
 
     context = {
-        "total_gastos": total, 
-        "cantidad_gastos": cantidad, 
+        "total_gastos": total,
+        "cantidad_gastos": cantidad,
         "por_anio": por_anio,
-        "por_tipo" : por_tipo,
+        "por_tipo": por_tipo,
     }
 
     return render(request, "gastos/dashboard.html", context)

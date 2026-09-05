@@ -24,6 +24,14 @@ class GastoForm(forms.ModelForm):
             "observacion": forms.Textarea(attrs={"rows": 3}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        previsto = cleaned_data.get("costo_previsto")
+        real = cleaned_data.get("costo_real")
+        if previsto is not None and real is not None:
+            if previsto < 0 or real < 0:
+                raise forms.ValidationError("Los costos no pueden ser negativos.")
+        return cleaned_data
 
 class RegistroUsuarioForm(UserCreationForm):
 
