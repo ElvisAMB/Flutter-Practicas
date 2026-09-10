@@ -37,7 +37,8 @@ Dashboard
 <script>
 
     const etiquetas = [
-        {% for item in por_anio %}        //         "{{ item.anio }}",
+        {% for item in por_anio %}        
+            {{ item.anio }},
         {% endfor %}
     ];
 
