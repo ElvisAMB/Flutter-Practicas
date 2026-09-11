@@ -21,7 +21,7 @@ from .forms import RegistroUsuarioForm
 # Create your views here.
 
 
-@login_required
+@login_required # El usuario debe estar autenticado para acceder
 def dashboard(request):
 
     anio = request.GET.get("anio")

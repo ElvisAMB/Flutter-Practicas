@@ -29,12 +29,11 @@
                 <span class="text-white me-3">
                     {{ user.username }}
                 </span>
-                <!-- <form method="post" action="{% url 'logout' %}"> -->
-                <form method="post" action="{% url 'logout' %}"></form>
-                {% csrf_token %}
-                <button class="btn btn-outline-light" type="submit">
-                    Cerrar sesión
-                </button>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-light" type="submit">
+                        Cerrar sesión
+                    </button>
                 </form>
             </div>
             {% endif %}
@@ -49,4 +48,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
 </body>
+
 </html>
