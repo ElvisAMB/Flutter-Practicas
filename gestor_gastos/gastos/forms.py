@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class GastoForm(forms.ModelForm):
-
+    
     class Meta:
 
         model = Gasto
@@ -27,9 +27,11 @@ class GastoForm(forms.ModelForm):
         cleaned_data = super().clean()
         previsto = cleaned_data.get("costo_previsto")
         real = cleaned_data.get("costo_real")
+
         if previsto is not None and real is not None:
             if previsto < 0 or real < 0:
                 raise forms.ValidationError("Los costos no pueden ser negativos.")
+
         return cleaned_data
 
 class RegistroUsuarioForm(UserCreationForm):

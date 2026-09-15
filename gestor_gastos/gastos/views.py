@@ -1,9 +1,9 @@
-from django.db.models.functions import ExtractYear
+from django.db.models.functions import ExtractYear, TruncDay
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Sum, Count
-from .models import Gasto
+from .models import Gasto, TipoGasto
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -17,19 +17,19 @@ from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import FormView
 from .forms import RegistroUsuarioForm
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models.functions import ExtractMonth
 
 # Create your views here.
 
 
-@login_required # El usuario debe estar autenticado para acceder
+@login_required
 def dashboard(request):
 
     anio = request.GET.get("anio")
     mes = request.GET.get("mes")
 
-    gastos = Gasto.objects.filter(
-        usuario=request.user
-    )  # "Obtenga los gastos cuyo usuario sea el usuario autenticado."
+    gastos = Gasto.objects.filter(usuario=request.user)
 
     if anio:
         gastos = gastos.filter(fecha__year=anio)
@@ -38,7 +38,6 @@ def dashboard(request):
         gastos = gastos.filter(fecha__month=mes)
 
     total = gastos.aggregate(total=Sum("costo_real"))["total"] or 0
-
     cantidad = gastos.aggregate(cantidad=Count("codigo"))["cantidad"] or 0
 
     por_anio = (
@@ -58,7 +57,6 @@ def dashboard(request):
         "total_gastos": total,
         "cantidad_gastos": cantidad,
         "por_anio": por_anio,
-        "por_tipo": por_tipo,
     }
 
     return render(request, "gastos/dashboard.html", context)
@@ -117,3 +115,33 @@ class RegistroView(FormView):
         usuario = form.save()
         login(self.request, usuario)
         return super().form_valid(form)
+
+
+class TipoGastoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
+    model = TipoGasto
+
+    fields = ["nombre", "descripcion", "activo"]
+    template_name = "gastos/tipogasto_form.html"
+    success_url = reverse_lazy("tipogasto_lista")
+    permission_required = "gastos.manage_catalog"
+
+
+class TipoGastoListView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
+    model = TipoGasto
+
+    # fields = ['nombre', 'descripcion', 'activo']
+    # template_name = 'gastos/tipogasto_form.html'
+    # success_url = reverse_lazy('tipogasto_lista')
+    # permission_required = 'gastos.manage_catalog'
+
+
+class TipoGastoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
+    model = TipoGasto
+
+    # fields = ['nombre', 'descripcion', 'activo']
+    # template_name = 'gastos/tipogasto_form.html'
+    # success_url = reverse_lazy('tipogasto_lista')
+    # permission_required = 'gastos.manage_catalog'

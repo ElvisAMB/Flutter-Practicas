@@ -43,6 +43,11 @@ class Gasto(models.Model):
     class Meta:
         ordering = ["-fecha", "-codigo"]
 
+        permissions = [
+            ("view_dashboard", "Puede visualizar el dashboard"),
+            ("manage_catalog", "Puede administrar tipos de gasto"),
+        ]
+
     def _str_(self):
         return f"{self.codigo} - {self.descripcion}"
 

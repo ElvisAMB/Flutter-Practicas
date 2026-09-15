@@ -9,6 +9,23 @@ Dashboard
 <h1 class="mb-4">
     Dashboard
 </h1>
+
+<form method="get" class="row g-2 mb-4">
+
+    <div class="col-auto">
+        <input type="number" name="anio" class="form-control" placeholder="Año" value="{{ request.GET.anio }}">
+    </div>
+
+    <div class="col-auto">
+        <input type="number" name="mes" class="form-control" placeholder="Mes" value="{{ request.GET.mes }}">
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
+
+</form>
+
 <div class="row">
     <div class="col-md-4">
         <div class="card card-dashboard shadow-sm">
@@ -32,20 +49,23 @@ Dashboard
     </div>
 </div>
 
-<canvas id="graficoAnual"></canvas>
+<div style="max-width: 1000px">
+    <canvas id="graficoAnual"></canvas>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
     const etiquetas = [
-        {% for item in por_anio %}        
-            {{ item.anio }},
+        {% for item in por_anio %}
+    "{{ item.anio }}",
         {% endfor %}
     ];
 
     const valores = [
         {% for item in por_anio %}
-            {{ item.total|default:0 }},
-        {% endfor %}
+    { { item.total |default: 0 } },
+    {% endfor %}
     ];
 
     new Chart(
@@ -65,5 +85,6 @@ Dashboard
     );
 
 </script>
+
 
 {% endblock %}
