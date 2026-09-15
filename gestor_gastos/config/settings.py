@@ -138,9 +138,9 @@ MAILERS = {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
     },
 }
-
+#Adónde manda @login_required a un usuario no autenticado.
 LOGIN_URL = '/login/'
-
+#Adónde va después de iniciar sesión con éxito.
 LOGIN_REDIRECT_URL = '/'
-
+#Adónde va después de cerrar sesión.
 LOGOUT_REDIRECT_URL = '/login/'

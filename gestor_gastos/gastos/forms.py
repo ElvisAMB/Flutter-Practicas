@@ -3,7 +3,6 @@ from .models import Gasto
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-
 class GastoForm(forms.ModelForm):
 
     class Meta:
